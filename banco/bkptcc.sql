@@ -73,7 +73,11 @@ INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `ni
 	(10, 'Kemilly Reginão', 'kemillyreginao@email.com', '$2b$10$ZsarrM/OMLudTmzucF2zKufROi0EJsMqf0.wvWPfhCVjlFCPtJPZK', '(18) 999999999', 'U'),
 	(12, 'stardev', 'stardevaulas@gmail.com', '$2b$10$ylekuE03GsaanFlZSukwmupamvlkBaVUIePEexU7uHvqLmAnznvNu', '(18) 99689-0559', 'A'),
 	(13, 'Lauane Pasquini Ribeiro', 'lauane@email.com', '$2b$10$5p9grcnBMmzwO51lyQ1JcO7HtpXPnHowC9KUAjn6kWZ03VuQH62QO', '(18) 99653-4326', 'U'),
+<<<<<<< Updated upstream
 	(14, 'Érick Jacquin', 'jacquin@emial.com', '$2b$10$UJlGcUuoiB7/MmEubaq0UeHyAFddgHa4FXOYJI8Z7qdek9DqqcjMm', '(18) 99653-4326', 'U');
+=======
+	(14, 'Lauane Pasquini Ribeiro', 'lauane.ribeiro@email', '$2b$10$1bxIGT/ObmdAZohmFspbIOukmGPLkHaujAe7180qrmFbRxUVFkWuO', '(18) 99653-4326', 'U');
+>>>>>>> Stashed changes
 
 -- Copiando estrutura para tabela stardev.contato
 DROP TABLE IF EXISTS `contato`;
