@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrativa</title>
+
+    <link rel="stylesheet" href="/front/style.css">
+    <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+</head>
+
+<body>
+
+    <h1>Área Administrativa</h1>
+
+    <!-- ========================= -->
+    <!-- FORMULÁRIO -->
+    <!-- ========================= -->
+
+    <form id="formVideo">
+
+        <label>Nome da Aula</label>
+        <input type="text" id="nome" required>
+
+        <label>Descrição</label>
+        <textarea id="descricao" required></textarea>
+
+        <label>Link do vídeo</label>
+        <input type="text" id="link" required>
+
+        <label>ID da matéria</label>
+        <input type="number" id="materia" required>
+
+        <div id="listaMaterias"></div>
+
+        <button type="submit">Salvar</button>
+        
+
+    </form>
+
+    <hr>
+
+    <!-- ========================= -->
+    <!-- TABELA -->
+    <!-- ========================= -->
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Matéria</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabela">
+            <!-- as aulas aparecem aqui -->
+        </tbody>
+
+    </table>
+
+</body>
+
+<script>
+
+    const API = "http://10.111.9.133:3000/videoaulas";
+
+    let editandoId = null;
+
+    const form = document.getElementById("formVideo");
+    const tabela = document.getElementById("tabela");
+
+
+    // ========================================
+    // LISTAR IDs DAS AULAS
+    // ========================================
+
+    async function carregarMaterias() {
+
+        try {
+
+            const res = await fetch("http://10.111.9.133:3000/aulas");
+
+            const aulas = await res.json();
+
+            const div = document.getElementById("listaMaterias");
+
+            div.innerHTML = "";
+
+            aulas.forEach(aula => {
+
+                div.innerHTML += `
+                    <p>
+                        ID: ${aula.id_aula} - ${aula.materia}
+                    </p>
+                `;
+            });
+
+        } catch (erro) {
+
+            console.log(erro);
+
+            alert("Erro ao carregar matérias");
+        }
+    }
+
+
+
+    // ========================================
+    // SALVAR / EDITAR
+    // ========================================
+
+    form.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+        const payload = {
+
+            nome_aulas: document.getElementById("nome").value.trim(),
+
+            descricao: document.getElementById("descricao").value.trim(),
+
+            link: document.getElementById("link").value.trim(),
+
+            id_aula: document.getElementById("materia").value
+        };
+
+
+        // VALIDAÇÃO
+
+        if (
+            !payload.nome_aulas ||
+            !payload.descricao ||
+            !payload.link ||
+            !payload.id_aula
+        ) {
+
+            alert("Preencha todos os campos");
+
+            return;
+        }
+
+
+        try {
+
+            const url = editandoId
+                ? `${API}/${editandoId}`
+                : API;
+
+            const metodo = editandoId
+                ? "PUT"
+                : "POST";
+
+
+            const resposta = await fetch(url, {
+
+                method: metodo,
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(payload)
+            });
+
+
+            const dados = await resposta.json();
+
+            alert(dados.message || "Salvo com sucesso");
+
+
+            form.reset();
+
+            editandoId = null;
+
+            carregar();
+
+        } catch (erro) {
+
+            console.log(erro);
+
+            alert("Erro ao salvar");
+        }
+    });
+
+
+
+    // ========================================
+    // LISTAR VIDEOAULAS
+    // ========================================
+
+    async function carregar() {
+
+        try {
+
+            const res = await fetch(API);
+
+            const data = await res.json();
+
+            tabela.innerHTML = "";
+
+
+            data.forEach(v => {
+
+                tabela.innerHTML += `
+
+                    <tr>
+
+                        <td>${v.nome_aulas}</td>
+
+                        <td>${v.descricao}</td>
+
+                        <td>${v.materia || "Sem matéria"}</td>
+
+                        <td>
+
+                            <button onclick="editar(${v.id_materias})">
+                                Editar
+                            </button>
+
+                            <button onclick="excluir(${v.id_materias})">
+                                Excluir
+                            </button>
+
+                        </td>
+
+                    </tr>
+                `;
+            });
+
+        } catch (erro) {
+
+            console.log(erro);
+
+            alert("Erro ao carregar dados");
+        }
+    }
+
+
+
+    // ========================================
+    // EDITAR
+    // ========================================
+
+    async function editar(id) {
+
+        try {
+
+            const res = await fetch(API);
+
+            const data = await res.json();
+
+
+            // CORREÇÃO AQUI
+            const v = data.find(x => x.id_materias == id);
+
+            if (!v) {
+
+                alert("Registro não encontrado");
+
+                return;
+            }
+
+
+            editandoId = id;
+
+            document.getElementById("nome").value = v.nome_aulas;
+
+            document.getElementById("descricao").value = v.descricao;
+
+            document.getElementById("link").value = v.link;
+
+            document.getElementById("materia").value = v.id_aula;
+
+
+            // sobe a tela
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+            });
+
+        } catch (erro) {
+
+            console.log(erro);
+
+            alert("Erro ao editar");
+        }
+    }
+
+
+
+    // ========================================
+    // EXCLUIR
+    // ========================================
+
+    async function excluir(id) {
+
+        const confirmar = confirm(
+            "Deseja realmente excluir?"
+        );
+
+        if (!confirmar) return;
+
+
+        try {
+
+            await fetch(`${API}/${id}`, {
+
+                method: "DELETE"
+            });
+
+            alert("Excluído com sucesso");
+
+            carregar();
+
+        } catch (erro) {
+
+            console.log(erro);
+
+            alert("Erro ao excluir");
+        }
+    }
+
+
+
+    // ========================================
+    // INICIAR
+    // ========================================
+
+    carregarMaterias();
+
+    carregar();
+
+</script>
+
+</html>
