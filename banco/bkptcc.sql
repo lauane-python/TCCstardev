@@ -2,7 +2,7 @@
 -- Servidor:                     127.0.0.1
 -- Versão do servidor:           10.4.32-MariaDB - mariadb.org binary distribution
 -- OS do Servidor:               Win64
--- HeidiSQL Versão:              12.10.0.7000
+-- HeidiSQL Versão:              12.17.0.7270
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -56,9 +56,9 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
   `telefone` varchar(15) NOT NULL DEFAULT '',
   `nivel` varchar(50) DEFAULT 'U',
   PRIMARY KEY (`id_cadastro`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- Copiando dados para a tabela stardev.cadastro: ~12 rows (aproximadamente)
+-- Copiando dados para a tabela stardev.cadastro: ~13 rows (aproximadamente)
 DELETE FROM `cadastro`;
 INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `nivel`) VALUES
 	(1, 'Melissa Vieira', 'melissateste@gmail.com', 'd97e69b8cb7e8e8f159d0a4b57d469e06bfe2f241322f7e663aa94555534a6e7', '2147483647', 'U'),
@@ -72,7 +72,8 @@ INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `ni
 	(9, 'Michele Pasquini', 'michelepasquini@email.com', '$2b$10$cBLo5QLyUQK9VXzxS/tIXuaVP40A80FhA0VwLZVGmCN/8KTvRj1nO', '(18) 99653-4326', 'U'),
 	(10, 'Kemilly Reginão', 'kemillyreginao@email.com', '$2b$10$ZsarrM/OMLudTmzucF2zKufROi0EJsMqf0.wvWPfhCVjlFCPtJPZK', '(18) 999999999', 'U'),
 	(12, 'stardev', 'stardevaulas@gmail.com', '$2b$10$ylekuE03GsaanFlZSukwmupamvlkBaVUIePEexU7uHvqLmAnznvNu', '(18) 99689-0559', 'A'),
-	(13, 'Lauane Pasquini Ribeiro', 'lauane@email.com', '$2b$10$5p9grcnBMmzwO51lyQ1JcO7HtpXPnHowC9KUAjn6kWZ03VuQH62QO', '(18) 99653-4326', 'U');
+	(13, 'Lauane Pasquini Ribeiro', 'lauane@email.com', '$2b$10$5p9grcnBMmzwO51lyQ1JcO7HtpXPnHowC9KUAjn6kWZ03VuQH62QO', '(18) 99653-4326', 'U'),
+	(14, 'Érick Jacquin', 'jacquin@emial.com', '$2b$10$UJlGcUuoiB7/MmEubaq0UeHyAFddgHa4FXOYJI8Z7qdek9DqqcjMm', '(18) 99653-4326', 'U');
 
 -- Copiando estrutura para tabela stardev.contato
 DROP TABLE IF EXISTS `contato`;
@@ -84,9 +85,9 @@ CREATE TABLE IF NOT EXISTS `contato` (
   `data_envio` timestamp NOT NULL DEFAULT current_timestamp(),
   `status_feedback` varchar(20) DEFAULT 'Pendente',
   PRIMARY KEY (`id_contato`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- Copiando dados para a tabela stardev.contato: ~16 rows (aproximadamente)
+-- Copiando dados para a tabela stardev.contato: ~17 rows (aproximadamente)
 DELETE FROM `contato`;
 INSERT INTO `contato` (`id_contato`, `nome`, `email`, `comentario`, `data_envio`, `status_feedback`) VALUES
 	(1, 'back', 'stardevaulas@gmail.com', 'shfghfg', '2026-05-05 13:24:30', 'Pendente'),
@@ -104,7 +105,8 @@ INSERT INTO `contato` (`id_contato`, `nome`, `email`, `comentario`, `data_envio`
 	(13, 'Lauane Pasquini', 'lauane@email.com', 'lauane megamente', '2026-05-05 13:24:30', 'Pendente'),
 	(14, 'Kemilly Reginão', 'reginao@email.com', 'Reginão gostou', '2026-05-05 13:24:30', 'Pendente'),
 	(15, 'Kemilly Reginão', 'reginao@email.com', 'Reginão gostou', '2026-05-05 13:24:30', 'Pendente'),
-	(17, 'Filipe Deshasp', 'feliperer@email.com', 'ajfhasjkdfhajksdfhkjsdf', '2026-05-05 13:24:30', 'Pendente');
+	(17, 'Filipe Deshasp', 'feliperer@email.com', 'ajfhasjkdfhajksdfhkjsdf', '2026-05-05 13:24:30', 'Pendente'),
+	(18, 'Érick Jacquin', 'jacquin@email.com', 'trouxe bolinho de chocolate para o Brasil!', '2026-05-19 19:35:13', 'Pendente');
 
 -- Copiando estrutura para tabela stardev.materias
 DROP TABLE IF EXISTS `materias`;
