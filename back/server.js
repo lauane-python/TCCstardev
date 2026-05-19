@@ -589,5 +589,5 @@ app.delete('/videoaulas/:id', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando em http://10.111.9.174:${PORT}`);
+    console.log(`🚀 Servidor rodando em http://10.0.2.15:${PORT}`);
 });
