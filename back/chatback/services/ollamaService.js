@@ -1,36 +1,48 @@
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-/*BASE CONHECIMENTO*/
+/*BASE DE CONHECIMENTO*/
 const caminhoBase = path.join(
     __dirname,
-    "../base_conhecimento/baseConhecimento.txt"
+    "../data/base_conhecimento.txt"
 );
 const contextoBase = fs.readFileSync(
     caminhoBase,
     "utf-8"
 );
-/*OLLAMA*/
-async function gerarResposta(pergunta, historico) {
+/*OLLAMA SERVICE*/
+async function gerarResposta(
+    pergunta,
+    historico
+) {
     try {
         const prompt = `
-Você é a Stardev IA.
-Você é uma assistente educacional.
-Responda de forma:
+Você é a Dev Mentor.
+Você é a IA oficial da plataforma Stardev.
+Seu objetivo é:
+- ajudar alunos
+- responder dúvidas de programação
+- explicar conceitos
+- ajudar sobre aulas
+- ajudar sobre o sistema da plataforma
+Você responde de forma:
+- moderna
 - amigável
 - objetiva
-- profissional
+- clara
 - organizada
-CONTEXTO STARDEV:
+Nunca invente funcionalidades inexistentes.
+CONTEXTO DA STARDEV:
 ${contextoBase}
 HISTÓRICO:
 ${historico.join("\n")}
-PERGUNTA:
+PERGUNTA DO ALUNO:
 ${pergunta}
-RESPOSTA:
+RESPOSTA DA DEV MENTOR:
 `;
         const response = await axios.post(
             "http://localhost:11434/api/generate",
+
             {
                 model: "llama3",
                 prompt: prompt,
@@ -40,7 +52,7 @@ RESPOSTA:
         return response.data.response;
     } catch (error) {
         console.log(error);
-        return "Erro ao conectar com IA";
+        return "Erro ao conectar com a IA.";
     }
 }
 module.exports = gerarResposta;

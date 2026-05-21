@@ -13,7 +13,7 @@ app.use(cors());
 
 // chatbot
 const chatbotRoutes = require(
-    "./chatback/routes/chatbotRoutes"
+    "./chatback/routes/chatbot"
 );
 
 /* =========================
