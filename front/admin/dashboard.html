@@ -5,6 +5,8 @@
     <title>Dashboard Admin</title>
     <link rel="stylesheet" href="/front/style.css">
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+    <!--CHATBOT CSS -->
+    <link rel="stylesheet" href="/front/chatfront/css/chatbot.css">
 </head>
 <body id="body_index_cadastro">
     <header id="header_index_cadastro">
@@ -14,13 +16,27 @@
             <a href="/front/admin/editarFeed.html">Editar</a>
             <a href="/front/admin/listarAulas.html">listarAulas</a>
             <a href="/front/admin/admin.html">Administrador</a>
-            <a href="/front/index.html" onclick="logout()">Index</a>
+            <a href="/front/index.html" onclick="logout()">Index </a>
         </nav>
     </header>
     <main style="text-align:center; padding:50px;">
         <h1>Bem-vindo administrador</h1>
         <p>Gerencie feedbacks e aulas da plataforma.</p>
     </main>
+    <!--CONTAINER CHATBOT -->
+    <div id="chatbot-container"></div>
+    <script>
+        fetch("/front/chatfront/components/chatbot.html")
+        .then(response => response.text())
+        .then(data => {
+            document
+                .getElementById("chatbot-container")
+                .innerHTML = data;
+            const script = document.createElement("script");
+            script.src = "/front/chatfront/js/chatbot.js";
+            document.body.appendChild(script);
+        });
+    </script>
     <script>
         const nivel = localStorage.getItem("nivel");
         if (nivel !== "A") {

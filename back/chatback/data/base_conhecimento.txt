@@ -1,0 +1,28 @@
+A Stardev é uma plataforma educacional focada em tecnologia.
+
+A plataforma oferece:
+- videoaulas
+- conteúdos educacionais
+- suporte aos estudantes
+- sistema administrativo
+
+As principais áreas são:
+- Front-end
+- Back-end
+- Banco de dados
+- Inteligência Artificial
+- UX/UI
+
+A plataforma possui:
+- login
+- cadastro
+- recuperação de senha
+- dashboard administrativo
+- gerenciamento de aulas
+
+O chatbot da Stardev ajuda usuários com dúvidas sobre:
+- funcionamento da plataforma
+- acesso
+- estudos
+- programação
+- cursos

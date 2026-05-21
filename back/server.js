@@ -11,6 +11,11 @@ const SECRET = "segredo_super_secreto";
 app.use(express.json());
 app.use(cors());
 
+// chatbot
+const chatbotRoutes = require(
+    "./chatback/routes/chatbotRoutes"
+);
+
 /* =========================
    MIDDLEWARE TOKEN (PADRÃO)
 ========================= */
@@ -32,13 +37,10 @@ function verificarToken(req, res, next) {
     }
 }
 
-/* =========================
-   CONTATO
-========================= */
+/*CONTATO*/
 app.post("/contato", async (req, res) => {
     try {
         const { nome = "", email = "", comentario = "" } = req.body;
-
         if (comentario.length < 10) {
             return res.json({ resposta: "Preencha o comentário corretamente" });
         }
@@ -48,25 +50,19 @@ app.post("/contato", async (req, res) => {
         if (nome.length < 6) {
             return res.json({ resposta: "Preencha o nome completo" });
         }
-
         const sql = `INSERT INTO contato (nome, email, comentario) VALUES (?,?,?)`;
         const [resu] = await conexao.query(sql, [nome, email, comentario]);
-
         if (resu.affectedRows === 1) {
             return res.json({ resposta: "Mensagem enviada com sucesso" });
         }
-
         return res.json({ resposta: "Erro ao enviar mensagem" });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
 
-/* =========================
-   CADASTRO
-========================= */
+/*CADASTRO*/
 app.post("/cadastro", async (req, res) => {
     try {
         const {
@@ -75,9 +71,7 @@ app.post("/cadastro", async (req, res) => {
             senha = "",
             telefone = ""
         } = req.body;
-
         const senhaTrim = senha.trim().replace("ㅤ", "");
-
         if (senhaTrim === "") {
             return res.json({ resposta: "Preencha uma senha" });
         }
@@ -93,48 +87,35 @@ app.post("/cadastro", async (req, res) => {
         if (telefone.length <= 12) {
             return res.json({ resposta: "Preencha o telefone corretamente" });
         }
-
         // verificar email existente
         const sqlSelect = `SELECT * FROM cadastro WHERE email = ?`;
         const [rows] = await conexao.query(sqlSelect, [email]);
-
         if (rows.length !== 0) {
             return res.json({ resposta: "Email já cadastrado" });
         }
-
         const hash = await bcrypt.hash(senhaTrim, 10);
-
         const sqlInsert = `
             INSERT INTO cadastro (nome, email, senha, telefone)
             VALUES (?,?,?,?)
         `;
         const [resul] = await conexao.query(sqlInsert, [nome, email, hash, telefone]);
-
         if (resul.affectedRows === 1) {
             return res.json({ resposta: "Cadastro feito com sucesso!" });
         }
-
         return res.json({ resposta: "Erro ao cadastrar usuário" });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-
-/* =========================
-   LOGIN
-========================= */
+/*LOGIN*/
 app.post("/login", async (req, res) => {
     try {
         const { email, senha } = req.body;
-
         const emailTrim = email?.trim();
         const senhaTrim = senha?.trim();
-
         const sql = `SELECT * FROM cadastro WHERE email=?`;
         const [resultado] = await conexao.query(sql, [emailTrim]);
-
         if (resultado.length === 0) {
             return res.json({ resposta: "Email não cadastrado" });
         }
@@ -157,18 +138,15 @@ app.post("/login", async (req, res) => {
             token: token,
             nivel: usuario.nivel 
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/* =========================
-   CADASTRO DE AULAS (PROTEGIDO)
-========================= */
+/*CADASTRO DE AULAS (PROTEGIDO)*/
 app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
-        // 🔥 AQUI SIM!
+        // AQUI SIM!
         if (req.usuario.nivel !== "A") {
             return res.status(403).json({ resposta: "Acesso negado" });
         }
@@ -187,9 +165,7 @@ app.post("/CadastroAulas", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/* =========================
-   TROCAR SENHA (LOGADO)
-========================= */
+/*TROCAR SENHA (LOGADO)*/
 app.put("/trocarSenha", verificarToken, async (req, res) => {
     try {
         const { novaSenha } = req.body;
@@ -209,9 +185,7 @@ app.put("/trocarSenha", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/* =========================
-   VERIFICAR EMAIL
-========================= */
+/*VERIFICAR EMAIL*/
 app.post("/verificarEmail", async (req, res) => {
     try {
         const { email } = req.body;
@@ -223,9 +197,7 @@ app.post("/verificarEmail", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/* =========================
-   RECUPERAR SENHA (SEM TOKEN)
-========================= */
+/*RECUPERAR SENHA (SEM TOKEN)*/
 app.put("/recuperarSenha", async (req, res) => {
     try {
         const { email, novaSenha } = req.body;
@@ -250,9 +222,7 @@ app.put("/recuperarSenha", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/* =========================
-   ATUALIZAR USUÁRIO
-========================= */
+/*ATUALIZAR USUÁRIO*/
 app.put("/usuario", verificarToken, async (req, res) => {
     try {
         const { nome, email, telefone } = req.body;
@@ -272,16 +242,12 @@ app.put("/usuario", verificarToken, async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
-/* =========================
-   listar aulas
-========================= */
+/*listar aulas*/
 app.get("/aulas", async (req, res) => {
     const [dados] = await conexao.query("SELECT * FROM aulas");
     res.json(dados);
 });
-/* =========================
-   LISTAR FEEDBACKS (ADMIN)
-========================= */
+/*LISTAR FEEDBACKS (ADMIN)*/
 app.get("/feedbacks", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -303,9 +269,7 @@ app.get("/feedbacks", verificarToken, async (req, res) => {
         });
     }
 });
-/* =========================
-   EDITAR FEEDBACK
-========================= */
+/*EDITAR FEEDBACK*/
 app.put("/feedbacks/:id", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -342,9 +306,7 @@ app.put("/feedbacks/:id", verificarToken, async (req, res) => {
         });
     }
 });
-/* =========================
-   EXCLUIR FEEDBACK
-========================= */
+/*EXCLUIR FEEDBACK*/
 app.delete("/feedbacks/:id", verificarToken, async (req, res) => {
     try {
         if (req.usuario.nivel !== "A") {
@@ -376,11 +338,8 @@ app.delete("/feedbacks/:id", verificarToken, async (req, res) => {
 // VIDEOAULAS
 // LISTAR (com nome da matéria)
 app.get('/videoaulas', async (req, res) => {
-
     try {
-
         const [rows] = await conexao.query(`
-
             SELECT 
                 materias.id_materias,
                 materias.nome_aulas,
@@ -388,39 +347,28 @@ app.get('/videoaulas', async (req, res) => {
                 materias.link,
                 materias.id_aula,
                 aulas.materia
-
             FROM materias
-
             LEFT JOIN aulas 
             ON materias.id_aula = aulas.id_aula
-
             ORDER BY materias.id_materias DESC
         `);
-
         res.json(rows);
-
     } catch (error) {
-
         console.log(error);
-
         res.status(500).json({
             error: error.message
         });
     }
 });
-
 // CADASTRAR
 app.post('/videoaulas', async (req, res) => {
-
     try {
-
         const {
             nome_aulas,
             descricao,
             link,
             id_aula
         } = req.body;
-
 
         if (
             !nome_aulas ||
@@ -428,31 +376,22 @@ app.post('/videoaulas', async (req, res) => {
             !link ||
             !id_aula
         ) {
-
             return res.status(400).json({
                 message: "Preencha todos os campos"
             });
         }
-
-
         // VERIFICA FK
-
         const [aulaExiste] = await conexao.query(
             'SELECT * FROM aulas WHERE id_aula=?',
             [id_aula]
         );
-
-
         if (aulaExiste.length === 0) {
 
             return res.status(400).json({
                 message: "ID da aula não existe"
             });
         }
-
-
         const [result] = await conexao.query(`
-
             INSERT INTO materias
             (
                 nome_aulas,
@@ -460,134 +399,92 @@ app.post('/videoaulas', async (req, res) => {
                 link,
                 id_aula
             )
-
             VALUES (?, ?, ?, ?)
-
         `, [
-
             nome_aulas,
             descricao,
             link,
             id_aula
         ]);
-
-
         res.status(201).json({
-
             message: "Matéria cadastrada com sucesso",
-
             id: result.insertId
         });
-
     } catch (error) {
-
         console.log(error);
-
         res.status(500).json({
             error: error.message
         });
     }
 });
-
-
 // EDITAR
 app.put('/videoaulas/:id', async (req, res) => {
-
     try {
-
         const { id } = req.params;
-
         const {
             nome_aulas,
             descricao,
             link,
             id_aula
         } = req.body;
-
-
         const [result] = await conexao.query(`
-
             UPDATE materias
-
             SET
                 nome_aulas=?,
                 descricao=?,
                 link=?,
                 id_aula=?
-
             WHERE id_materias=?
-
         `, [
-
             nome_aulas,
             descricao,
             link,
             id_aula,
             id
         ]);
-
-
         if (result.affectedRows === 0) {
-
             return res.status(404).json({
                 message: "Matéria não encontrada"
             });
         }
-
-
         res.json({
             message: "Atualizado com sucesso"
         });
-
     } catch (error) {
-
         console.log(error);
-
         res.status(500).json({
             error: error.message
         });
     }
 });
-
 // EXCLUIR
 app.delete('/videoaulas/:id', async (req, res) => {
-
     try {
-
         const { id } = req.params;
-
-
         const [result] = await conexao.query(
-
             'DELETE FROM materias WHERE id_materias=?',
-
             [id]
         );
-
-
         if (result.affectedRows === 0) {
-
             return res.status(404).json({
                 message: "Matéria não encontrada"
             });
         }
-
-
         res.json({
             message: "Excluído com sucesso"
         });
-
     } catch (error) {
-
         console.log(error);
-
         res.status(500).json({
             error: error.message
         });
     }
 });
-
 const PORT = process.env.PORT || 3000;
+app.use(
+    "/chatback",
+    chatbotRoutes
+);
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando em http://10.111.9.174:${PORT}`);
+    console.log(`Servidor rodando em http://10.111.9.174:${PORT}`);
 });
