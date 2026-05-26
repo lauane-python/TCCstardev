@@ -66,7 +66,8 @@ async function enviarMensagem() {
                             "application/json"
                     },
                     body: JSON.stringify({
-                        message: mensagem
+                        message: mensagem,
+                        pagina: window.location.pathname
                     })
                 }
             );

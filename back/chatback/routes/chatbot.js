@@ -15,7 +15,7 @@ router.post(
     "/chat",
     async (req, res) => {
         try {
-            const { message } = req.body;
+            const { message, pagina } = req.body;
             const mensagemValida =
                 validarMensagem(message);
             if (!mensagemValida) {
