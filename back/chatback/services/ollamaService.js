@@ -13,7 +13,8 @@ const contextoBase = fs.readFileSync(
 /* OLLAMA SERVICE */
 async function gerarResposta(
     pergunta,
-    historico
+    historico,
+    contextoMateria
 ) {
     try {
         const prompt = `
@@ -48,6 +49,8 @@ ESTILO DA RESPOSTA:
 - direta
 CONTEXTO DA STARDEV:
 ${contextoBase}
+CONTEXTO DA PÁGINA:
+${contextoMateria}
 HISTÓRICO:
 ${historico.join("\n")}
 PERGUNTA DO ALUNO:

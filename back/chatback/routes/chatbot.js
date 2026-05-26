@@ -25,10 +25,32 @@ router.post(
             }
             const historico =
                 obterHistorico();
+            let contextoMateria = "";
+            if (pagina.includes("afront")) {
+                contextoMateria =
+                    "O aluno está estudando Front-end.";
+            }
+            else if (pagina.includes("aback")) {
+                contextoMateria =
+                    "O aluno está estudando Back-end.";
+            }
+            else if (pagina.includes("adb")) {
+                contextoMateria =
+                    "O aluno está estudando Banco de Dados.";
+            }
+            else if (pagina.includes("alogica")) {
+                contextoMateria =
+                    "O aluno está estudando Lógica de Programação.";
+            }
+            else {
+                contextoMateria =
+                    "O aluno está navegando pela plataforma StarDev.";
+            }
             const resposta =
                 await gerarResposta(
                     message,
-                    historico
+                    historico,
+                    contextoMateria
                 );
             adicionarMensagem(
                 `Aluno: ${message}`

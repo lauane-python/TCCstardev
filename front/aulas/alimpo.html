@@ -78,22 +78,41 @@
             const filtradas = data.filter(a => a.materia === MATERIA);
 
             filtradas.forEach(aula => {
+                const videoId =
+                    aula.link.split("v=")[1];
                 lista.innerHTML += `
-                    <div>
+                    <div class="card-video">
                         <h3>${aula.nome_aulas}</h3>
                         <p>${aula.descricao}</p>
-
-                        <iframe width="300" height="200"
-                            src="${const videoId = aula.link.split("v=")[1];}"
+                        <iframe
+                            width="300"
+                            height="200"
+                            src="https://www.youtube.com/embed/${videoId}"
                             frameborder="0"
                             allowfullscreen>
                         </iframe>
                     </div>
                 `;
-            });
+                });
         }
-
         carregarAulas();
+    </script>
+    <!-- CHATBOT -->
+    <div id="chatbot_container"></div>
+    <script>
+    fetch("/front/chatfront/components/chatbot.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById(
+            "chatbot_container"
+        ).innerHTML = data;
+        const script =
+            document.createElement("script");
+        script.src =
+            "/front/chatfront/js/chatbot.js";
+        document.body.appendChild(script);
+
+    });
     </script>
 </body>
 </html>
