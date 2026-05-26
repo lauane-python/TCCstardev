@@ -41,95 +41,84 @@
             <section id="listaAulas"></section>
         </section>
     </main>
-    
-</body>
-<script>
-    // CARROSSEL
-    const carrossel = document.querySelector('.drag');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-    carrossel.addEventListener('mousedown', (e) => {
-        isDown = true;
-        startX = e.pageX - carrossel.offsetLeft;
-        scrollLeft = carrossel.scrollLeft;
-    });
-    carrossel.addEventListener('mouseleave', () => {
-        isDown = false;
-    });
-    carrossel.addEventListener('mouseup', () => {
-        isDown = false;
-    });
-    carrossel.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - carrossel.offsetLeft;
-        const walk = (x - startX) * 2;
-        carrossel.scrollLeft = scrollLeft - walk;
-    });
-    //PEGAN DO AS AULAS CADASTRADAS NO AdministrativO
-    const API = "http://10.111.9.174:3000/videoaulas";
-
-    const lista = document.getElementById("listaAulas");
-
-    const MATERIA1 = "Back-End";
-
-    async function carregarAulas() {
-
-        try {
-
-            const res = await fetch(API);
-
-            const data = await res.json();
-
-            console.log(data);
-
-            lista.innerHTML = "";
-
-            const filtradas = data.filter(
-                a => a.materia === MATERIA1
-            );
-
-            if (filtradas.length === 0) {
-
+    <script>
+        // CARROSSEL
+        const carrossel = document.querySelector('.drag');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        carrossel.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - carrossel.offsetLeft;
+            scrollLeft = carrossel.scrollLeft;
+        });
+        carrossel.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+        carrossel.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+        carrossel.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - carrossel.offsetLeft;
+            const walk = (x - startX) * 2;
+            carrossel.scrollLeft = scrollLeft - walk;
+        });
+        //PEGAN DO AS AULAS CADASTRADAS NO AdministrativO
+        const API = "http://10.111.9.174:3000/videoaulas";
+        const lista = document.getElementById("listaAulas");
+        const MATERIA1 = "Back-End";
+        async function carregarAulas() {
+            try {
+                const res = await fetch(API);
+                const data = await res.json();
+                console.log(data);
+                lista.innerHTML = "";
+                const filtradas = data.filter(
+                    a => a.materia === MATERIA1
+                );
+                if (filtradas.length === 0) {
+                    lista.innerHTML = `
+                        <p>Nenhuma aula encontrada.</p>
+                    `;
+                    return;
+                }
+                filtradas.forEach(aula => {
+                    lista.innerHTML += `
+                        <div class="card-video">
+                            <h3>${aula.nome_aulas}</h3>
+                            <p>${aula.descricao}</p>
+                            <iframe
+                                width="300"
+                                height="200"
+                                src="${aula.link.replace("watch?v=", "embed/")}"
+                                frameborder="0"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    `;
+                });
+            } catch (erro) {
+                console.log("ERRO:", erro);
                 lista.innerHTML = `
-                    <p>Nenhuma aula encontrada.</p>
+                    <p>Erro ao carregar videoaulas.</p>
                 `;
-
-                return;
             }
-
-            filtradas.forEach(aula => {
-
-                lista.innerHTML += `
-                    <div class="card-video">
-
-                        <h3>${aula.nome_aulas}</h3>
-
-                        <p>${aula.descricao}</p>
-
-                        <iframe
-                            width="300"
-                            height="200"
-                            src="${aula.link.replace("watch?v=", "embed/")}"
-                            frameborder="0"
-                            allowfullscreen>
-                        </iframe>
-
-                    </div>
-                `;
-            });
-
-        } catch (erro) {
-
-            console.log("ERRO:", erro);
-
-            lista.innerHTML = `
-                <p>Erro ao carregar videoaulas.</p>
-            `;
         }
-    }
+        carregarAulas();
+    </script>    
+    <!-- CHATBOT -->
+    <div id="chatbot_container"></div>
 
-    carregarAulas();
-</script>
+    <script>
+    fetch("/front/chatfront/components/chatbot.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById(
+            "chatbot_container"
+        ).innerHTML = data;
+    });
+    </script>
+</body>
 </html>

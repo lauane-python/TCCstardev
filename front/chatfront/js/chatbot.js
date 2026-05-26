@@ -19,8 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const chatbotMessages =
         document.getElementById("chatbot_messages");
-
-    /* ABRIR CHAT */
     chatbotButton.addEventListener(
         "click",
         () => {
@@ -31,54 +29,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
     );
-
-    /* FECHAR CHAT */
     chatbotClose.addEventListener(
         "click",
         () => {
-
             chatbotModal.classList.add(
                 "chat_hidden"
             );
-
         }
     );
-
-    /* CRIAR MENSAGEM */
     function criarMensagem(texto, tipo) {
-
         const div =
             document.createElement("div");
-
         div.classList.add(tipo);
-
         div.innerHTML = texto;
-
         chatbotMessages.appendChild(div);
-
         chatbotMessages.scrollTop =
             chatbotMessages.scrollHeight;
     }
-
-    /* ENVIAR MENSAGEM */
     async function enviarMensagem() {
-
         const mensagem =
             chatbotInput.value.trim();
-
         if (mensagem === "") {
             return;
         }
-
         criarMensagem(
             mensagem,
             "user_message"
         );
-
         chatbotInput.value = "";
-
         try {
-
             const response =
                 await fetch(
                     `${API_URL}/chatback/chat`,

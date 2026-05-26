@@ -82,5 +82,16 @@
             }
             carregarVideos()
     </script>
+    <!-- CHATBOT -->
+    <div id="chatbot_container"></div>
+    <script>
+    fetch("/front/chatfront/components/chatbot.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById(
+            "chatbot_container"
+        ).innerHTML = data;
+    });
+    </script>
 </body>
 </html>

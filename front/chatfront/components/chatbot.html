@@ -1,19 +1,32 @@
-<!--BOTÃO FLUTUANTE-->
+<!-- BOTÃO FLUTUANTE -->
 <div id="chatbot_button">
-    <img src="/front/chatfront/assets/logo-chat.png" alt="Chatbot">
+    <img src="/front/chatfront/assets/logo-chat.svg" alt="Dev Mentor">
 </div>
-<!--MODAL CHAT-->
+<!-- CHAT -->
 <div id="chatbot_modal" class="chat_hidden">
+    <!-- HEADER -->
     <div id="chatbot_header">
         <div id="chatbot_header_left">
-            <img src="/front/chatfront/assets/logo-chat.png" alt="Logo">
-            <h2>Dev Mentor</h2>
+            <img src="/front/chatfront/assets/logo-chat.svg" alt="Logo">
+            <div>
+                <h3>Dev Mentor</h3>
+            </div>
         </div>
         <button id="chatbot_close">✕</button>
     </div>
+    <!-- MENSAGENS -->
     <div id="chatbot_messages">
         <div class="bot_message">
-            Olá 👋<br><br>Sou a Dev Mentor.<br>Como posso ajudar você hoje?
+            Olá, estudante.<br><br>
+            Sou a Dev Mentor da StarDev.<br>
+            Posso ajudar você com:
+            <br><br>
+            • HTML<br>
+            • CSS<br>
+            • JavaScript<br>
+            • Back-end<br>
+            • Banco de Dados<br>
+            • Lógica de Programação
         </div>
     </div>
     <div id="chatbot_input_area">
@@ -21,5 +34,6 @@
         <button id="chatbot_send">Enviar</button>
     </div>
 </div>
-<script src="./config/api.js"></script>
-<script src="./js/chatbot.js"></script>
+<link rel="stylesheet" href="/front/chatfront/css/chatbot.css">
+<script src="/front/chatfront/config/api.js"></script>
+<script src="/front/chatfront/js/chatbot.js"></script>
