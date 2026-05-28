@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Servidor:                     127.0.0.1
--- Versão do servidor:           10.4.32-MariaDB - mariadb.org binary distribution
+-- Versão do servidor:           12.2.2-MariaDB - MariaDB Server
 -- OS do Servidor:               Win64
--- HeidiSQL Versão:              12.17.0.7270
+-- HeidiSQL Versão:              12.10.0.7000
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -56,28 +56,13 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
   `telefone` varchar(15) NOT NULL DEFAULT '',
   `nivel` varchar(50) DEFAULT 'U',
   PRIMARY KEY (`id_cadastro`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- Copiando dados para a tabela stardev.cadastro: ~13 rows (aproximadamente)
+-- Copiando dados para a tabela stardev.cadastro: ~2 rows (aproximadamente)
 DELETE FROM `cadastro`;
 INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `nivel`) VALUES
-	(1, 'Melissa Vieira', 'melissateste@gmail.com', 'd97e69b8cb7e8e8f159d0a4b57d469e06bfe2f241322f7e663aa94555534a6e7', '2147483647', 'U'),
-	(2, 'Lauane Ribeiro', 'lauaneteste@gmail.com', 'bfe61a27a6811bbd325383dee08c7dbd34c1886467f2f94e57cbedff9be0e073', '(18)98817-5506', 'U'),
-	(3, 'BRUNO FERREIRA', 'brunoteste@hotmail.cm', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', '(18)98823-2550', 'U'),
-	(4, 'Bruno Teste', 'BRUNÃOFERREIRÃO', 'b90fe858ff448ca34d553ee4d31b0ee2f566be6e3279a8de3df8d72a690d8d6e', '(18)98823-2550', 'U'),
-	(5, 'Matheus Oliver', 'matheusoliveira@gmail.com', '1234567Matheus', '(18)98823-2550', 'U'),
-	(6, 'Lauane Pasquini Ribeiro', 'lauane.ribeiro@aluno.senai.br', '$2b$10$9bhqeUJA3Nhc5Qr2Lu.4Neji1/3tqU7nBwHmcqri/YGCN4israxem', '(18) 99653-4326', 'U'),
-	(7, 'Kemilly Reginão', 'kemillyrignao@email.com', '$2b$10$qDOJ1wAv9/GbumTqCT5rPOvKswj4aIZKEJggPJwujQTwHnAEk5Njq', '(18) 99689-5996', 'U'),
-	(8, 'Lauane Ribeiro', 'lauaneribeiro@email.com', '$2b$10$va86GtwgkrB0V1r6xIghh.ZkK1T38uaGw6dv61sQIlf1sCgSCcr8S', '(18) 99653-4326', 'U'),
-	(9, 'Michele Pasquini', 'michelepasquini@email.com', '$2b$10$cBLo5QLyUQK9VXzxS/tIXuaVP40A80FhA0VwLZVGmCN/8KTvRj1nO', '(18) 99653-4326', 'U'),
-	(10, 'Kemilly Reginão', 'kemillyreginao@email.com', '$2b$10$ZsarrM/OMLudTmzucF2zKufROi0EJsMqf0.wvWPfhCVjlFCPtJPZK', '(18) 999999999', 'U'),
-	(12, 'stardev', 'stardevaulas@gmail.com', '$2b$10$ylekuE03GsaanFlZSukwmupamvlkBaVUIePEexU7uHvqLmAnznvNu', '(18) 99689-0559', 'A'),
-	(13, 'Lauane Pasquini Ribeiro', 'lauane@email.com', '$2b$10$5p9grcnBMmzwO51lyQ1JcO7HtpXPnHowC9KUAjn6kWZ03VuQH62QO', '(18) 99653-4326', 'U'),
-<<<<<<< Updated upstream
-	(14, 'Érick Jacquin', 'jacquin@emial.com', '$2b$10$UJlGcUuoiB7/MmEubaq0UeHyAFddgHa4FXOYJI8Z7qdek9DqqcjMm', '(18) 99653-4326', 'U');
-=======
-	(14, 'Lauane Pasquini Ribeiro', 'lauane.ribeiro@email', '$2b$10$1bxIGT/ObmdAZohmFspbIOukmGPLkHaujAe7180qrmFbRxUVFkWuO', '(18) 99653-4326', 'U');
->>>>>>> Stashed changes
+	(15, 'Lauane Gazola', 'lauanegazola@gmail.com', '$2b$10$N7C1CdfbwVM1ve9V7zO7ke7.UPLHOAlOlUxrgm5icwSCRNRNi4W.G', '(18) 99653-4326', 'U'),
+	(16, 'STARDEV', 'stardevaulas@gmail.com', '$2b$10$9nhJ99/wWi4EJIh4uXINie54Fhomuu2twV1zm9Jre.MQOV6tr0D.e', 'stardevaulas@gm', 'A');
 
 -- Copiando estrutura para tabela stardev.contato
 DROP TABLE IF EXISTS `contato`;
