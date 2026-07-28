@@ -34,6 +34,9 @@
                 <p class="card-aula marrom"><a href="/front/aulas/arede.html" target="_blank" class="hrefs_au">Redes e IOT</a></p>
                 <p class="card-aula amarelo"><a href="/front/aulas/alinguagens.html" target="_blank" class="hrefs_au">Linguagem de Programação</a></p>
             </section>
+            <section class="listaAulas">
+                <p> Carregando Aulas... </p>
+            </section>
         </section>
     </main>
     <script>
@@ -61,38 +64,105 @@
           carrossel.scrollLeft = scrollLeft - walk;
         });
 
-         // pegando aulas do admin
-        const API = "http://10.111.9.174:3000/videoaulas";
+    
+        const API = "http://10.111.9.22:3000/videoaulas";
+
+        // ID DA MATÉRIA BACK-END
+        const ID_MATERIA = 3;
+
         const lista = document.getElementById("listaAulas");
 
-        // 🔥 MUDE AQUI PARA CADA PÁGINA
-        const MATERIA = "LogicaProgramacao";
-
         async function carregarAulas() {
-            const res = await fetch(API);
-            const data = await res.json();
 
-            lista.innerHTML = "";
+            try {
 
-            // 🔥 FILTRO
-            const filtradas = data.filter(a => a.materia === MATERIA);
+                const resposta = await fetch(API);
 
-            filtradas.forEach(aula => {
-                lista.innerHTML += `
-                    <div>
-                        <h3>${aula.nome_aulas}</h3>
-                        <p>${aula.descricao}</p>
+                if (!resposta.ok) {
+                    throw new Error("Erro ao buscar as aulas");
+                }
 
-                        <iframe width="300" height="200"
-                            src="${const videoId = aula.link.split("v=")[1];}"
-                            frameborder="0"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
+                const aulas = await resposta.json();
+
+                console.log("Aulas recebidas:", aulas);
+
+                lista.innerHTML = "";
+
+                // Pega somente as aulas do Back-End
+                const aulasMateria = aulas.filter(
+                    aula => Number(aula.id_aula) === ID_MATERIA
+                );
+
+                console.log("Aulas de Back-End:", aulasMateria);
+
+                // Se não tiver aula
+                if (aulasMateria.length === 0) {
+
+                    lista.innerHTML = `
+                        <p class="nenhuma-aula">
+                            Nenhuma aula cadastrada para esta matéria.
+                        </p>
+                    `;
+
+                    return;
+                }
+
+                // Mostra cada aula
+                aulasMateria.forEach(aula => {
+
+                    let link = aula.link;
+
+                    // Link do YouTube:
+                    // https://www.youtube.com/watch?v=ABC123
+                    if (link.includes("watch?v=")) {
+
+                        const codigo = link.split("watch?v=")[1].split("&")[0];
+
+                        link = `https://www.youtube.com/embed/${codigo}`;
+                    }
+
+                    // Link do YouTube:
+                    // https://youtu.be/ABC123
+                    else if (link.includes("youtu.be/")) {
+
+                        const codigo = link.split("youtu.be/")[1].split("?")[0];
+
+                        link = `https://www.youtube.com/embed/${codigo}`;
+                    }
+
+                    lista.innerHTML += `
+                        <article class="card-video">
+
+                            <h2>${aula.nome_aulas}</h2>
+
+                            <p>${aula.descricao}</p>
+
+                            <iframe
+                                src="${link}"
+                                title="${aula.nome_aulas}"
+                                width="100%"
+                                height="450"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                            </iframe>
+
+                        </article>
+                    `;
+
+                });
+
+            } catch (erro) {
+
+                console.error("ERRO AO CARREGAR AULAS:", erro);
+
+                lista.innerHTML = `
+                    <p class="erro-aulas">
+                        Não foi possível carregar as aulas.
+                    </p>
                 `;
-            });
+            }
         }
-
         carregarAulas();
     </script>
 </body>

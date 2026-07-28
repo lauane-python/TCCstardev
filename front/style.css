@@ -586,6 +586,15 @@ button {
   }
 }
 
+/* admin */
+.label_admin {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #804256;
+}
+
+
 /* animações */
 /* CARDS */
 .card-criadora {

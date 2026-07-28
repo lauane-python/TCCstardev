@@ -14,7 +14,7 @@ const contextoBase = fs.readFileSync(
 async function gerarResposta(
     pergunta,
     historico,
-    contextoMateria
+    contextomateria
 ) {
     try {
         const prompt = `
@@ -50,7 +50,7 @@ ESTILO DA RESPOSTA:
 CONTEXTO DA STARDEV:
 ${contextoBase}
 CONTEXTO DA PÁGINA:
-${contextoMateria}
+${contextomateria}
 HISTÓRICO:
 ${historico.join("\n")}
 PERGUNTA DO ALUNO:

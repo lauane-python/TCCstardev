@@ -9,63 +9,63 @@
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
 </head>
 
-<body>
-
-    <h1>Área Administrativa</h1>
-
-    <!-- ========================= -->
-    <!-- FORMULÁRIO -->
-    <!-- ========================= -->
-
-    <form id="formVideo">
-
-        <label>Nome da Aula</label>
-        <input type="text" id="nome" required>
-
-        <label>Descrição</label>
-        <textarea id="descricao" required></textarea>
-
-        <label>Link do vídeo</label>
-        <input type="text" id="link" required>
-
-        <label>ID da matéria</label>
-        <input type="number" id="materia" required>
-
-        <div id="listaMaterias"></div>
-
-        <button type="submit">Salvar</button>
-        
-
-    </form>
-
-    <hr>
-
-    <!-- ========================= -->
-    <!-- TABELA -->
-    <!-- ========================= -->
-
-    <table border="1">
-
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Descrição</th>
-                <th>Matéria</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-
-        <tbody id="tabela">
-            <!-- as aulas aparecem aqui -->
-        </tbody>
-
-    </table>
+<body id="body_index_cadastro">
+    <header id="header_index_cadastro">
+        <h1 id="h1_cadastro">Área Administrativa</h1>
+        <button><a href="/front/index.html" target="_blank">index</a></button>
+        <button><a href="/front/login.html" target="_blank">login</a></button>
+        <button><a href="/front/cadastro.html" target="_blank">cadastro</a></button>
+        <button><a href="/front/esqueci.html" target="_blank">esqueci</a></button>
+        <button><a href="/front/aulas.html" target="_blank">aulas</a></button>
+    </header>
+    <main> 
+            <!-- ========================= -->
+        <!-- FORMULÁRIO -->
+        <!-- ========================= -->
+        <form id="formVideo">
+            <label class="label_admin" id="label_nomeaula">Nome da Aula</label>
+            <br>
+            <input type="text" id="nome" required>
+            <br>
+            <label class="label_admin" id="label_descricao">Descrição</label>
+            <br>
+            <textarea id="descricao" required></textarea>
+            <br>
+            <label class="label_admin" id="label_linkvideo">Link do vídeo</label>
+            <br>
+            <input type="text" id="link" required>
+            <br>
+            <label id="label_idmateria">ID da matéria</label>
+            <br>
+            <input type="number" id="materia" required>
+            <div id="listamaterias"></div>
+            <button type="submit">Salvar</button>
+        </form>
+        <hr>
+        <!-- ========================= -->
+        <!-- TABELA -->
+        <!-- ========================= -->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Matéria</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabela">
+                <!-- as aulas aparecem aqui -->
+            </tbody>
+        </table>
+    </main>
+    <footer id="footer_index_cadastro">Se você está lendo isso, parabéns você é um admin</footer>
 
 </body>
 
 <script>
 
-    const API = "http://10.111.9.174:3000/videoaulas";
+    const API = "http://10.111.9.22:3000/videoaulas";
 
     let editandoId = null;
 
@@ -77,15 +77,15 @@
     // LISTAR IDs DAS AULAS
     // ========================================
 
-    async function carregarMaterias() {
+    async function carregarmaterias() {
 
         try {
 
-            const res = await fetch("http://10.111.9.174:3000/aulas");
+            const res = await fetch("http://10.111.9.22:3000/aulas");
 
             const aulas = await res.json();
 
-            const div = document.getElementById("listaMaterias");
+            const div = document.getElementById("listamaterias");
 
             div.innerHTML = "";
 
@@ -331,7 +331,7 @@
     // INICIAR
     // ========================================
 
-    carregarMaterias();
+    carregarmaterias();
 
     carregar();
 
