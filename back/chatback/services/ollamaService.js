@@ -1,78 +1,78 @@
+/**
+ * ==========================================
+ * DEV MENTOR
+ * OLLAMA SERVICE
+ * ==========================================
+ */
 const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
-/* BASE DE CONHECIMENTO */
-const caminhoBase = path.join(
-    __dirname,
-    "../data/base_conhecimento.txt"
-);
-const contextoBase = fs.readFileSync(
-    caminhoBase,
-    "utf-8"
-);
-/* OLLAMA SERVICE */
-async function gerarResposta(
+const {
+    MODEL,
+    URL,
+    TEMPERATURE,
+    MAX_TOKENS,
+    STREAM,
+    BOT_NAME,
+    PLATFORM_NAME
+} = require("../config/chatConfig");
+// Gera uma resposta utilizando o Ollama
+async function gerarResposta({
     pergunta,
-    historico,
-    contextomateria
-) {
-    try {
-        const prompt = `
-Você é a Dev Mentor.
-Você é a inteligência artificial oficial da plataforma StarDev.
-Seu papel é ajudar estudantes iniciantes e intermediários em programação.
-REGRAS IMPORTANTES:
-- Responda SEMPRE em português do Brasil.
-- Responda de forma curta e organizada.
-- Nunca faça respostas gigantes.
-- Explique como uma professora moderna.
-- Seja amigável e motivadora.
-- Use exemplos simples.
-- NÃO use markdown.
-- NÃO use símbolos como ###, **, -, etc.
-- NÃO escreva código HTML quebrado.
-- NÃO invente funcionalidades.
-- NÃO fale como ChatGPT.
-- NÃO diga "sou uma IA treinada".
-- Quando o aluno pedir explicações:
-  explique passo a passo.
-- Quando perguntarem algo técnico:
-  dê exemplos reais.
-- Quando possível:
-  relacione com as aulas da StarDev.
-ESTILO DA RESPOSTA:
-- natural
-- moderna
-- humana
-- clara
-- curta
-- direta
-CONTEXTO DA STARDEV:
-${contextoBase}
-CONTEXTO DA PÁGINA:
-${contextomateria}
-HISTÓRICO:
-${historico.join("\n")}
-PERGUNTA DO ALUNO:
+    contexto
+}) {
+    const prompt = `
+Você é a ${BOT_NAME}.
+Você é a inteligência artificial oficial da plataforma ${PLATFORM_NAME}.
+Seu objetivo é ensinar programação para estudantes iniciantes e intermediários.
+Nunca diga que é o ChatGPT.
+Nunca diga que é uma IA da OpenAI.
+Nunca invente funcionalidades da plataforma.
+Sempre responda em português do Brasil.
+Explique de forma simples.
+Quando possível, utilize exemplos.
+Se o aluno pedir ajuda em programação, ensine passo a passo.
+Se a pergunta não tiver relação com programação ou com a plataforma StarDev, responda educadamente que seu foco é auxiliar nos estudos de tecnologia.
+==============================
+BASE DE CONHECIMENTO
+==============================
+${contexto.baseConhecimento}
+==============================
+CONTEXTO DA PÁGINA
+==============================
+${contexto.contextoPagina}
+==============================
+HISTÓRICO DA CONVERSA
+==============================
+${contexto.historico.join("\n")}
+==============================
+PERGUNTA DO ALUNO
+==============================
 ${pergunta}
-RESPOSTA DA DEV MENTOR:
+==============================
+RESPOSTA DA DEV MENTOR
+==============================
 `;
+    try {
         const response = await axios.post(
-            "http://127.0.0.1:11434/api/generate",
+            URL,
             {
-                model: "llama3",
-                prompt: prompt,
-                stream: false,
+                model: MODEL,
+                prompt,
+                stream: STREAM,
                 options: {
-                    temperature: 0.7,
-                    num_predict: 250
+                    temperature: TEMPERATURE,
+                    num_predict: MAX_TOKENS
                 }
             }
         );
         return response.data.response.trim();
-    } catch (error) {
-        console.log(error);
-        return "Desculpe, ocorreu um erro ao conectar com a Dev Mentor.";
+    } catch (erro) {
+        console.error("\n========== OLLAMA ==========");
+        console.error(erro.message);
+        if (erro.response) {
+            console.error(erro.response.data);
+        }
+        console.error("============================\n");
+        return "Desculpe, não consegui responder agora. Tente novamente em alguns instantes.";
     }
 }
 module.exports = gerarResposta;
