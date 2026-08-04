@@ -407,10 +407,20 @@ button {
   text-align: center;
   border-radius: 10px;
 }
+
+/* #section_todas_aulas{
+  margin
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+} */
+
 .roxo { background-color: #804256; }
 .verde { background-color: #716f35; }
 .marrom { background-color: #a56940; }
 .amarelo { background-color: #eccc6e; }
+
 #section_aulas {
   display: flex;
   justify-content: center;
