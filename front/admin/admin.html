@@ -65,162 +65,109 @@
 
 <script>
 
-    const API = "http://10.111.9.17:3000/videoaulas";
+    const API = "http://10.111.9.26:3000/videoaulas";
+    const API_MATERIAS = "http://10.111.9.26:3000/aulas";
 
     let editandoId = null;
 
     const form = document.getElementById("formVideo");
     const tabela = document.getElementById("tabela");
+    const listaMaterias = document.getElementById("listamaterias");
 
-
-    // ========================================
-    // LISTAR IDs DAS AULAS
-    // ========================================
-
-    async function carregarmaterias() {
+    // ================================
+    // CARREGA AS MATÉRIAS
+    // ================================
+    async function carregarMaterias() {
 
         try {
 
-            const res = await fetch("http://10.111.9.17:3000/aulas");
+            const resposta = await fetch(API_MATERIAS);
 
-            const aulas = await res.json();
+            if (!resposta.ok) {
+                throw new Error("Erro ao buscar matérias");
+            }
 
-            const div = document.getElementById("listamaterias");
+            const materias = await resposta.json();
 
-            div.innerHTML = "";
+            listaMaterias.innerHTML = "";
 
-            aulas.forEach(aula => {
+            if (materias.length === 0) {
 
-                div.innerHTML += `
+                listaMaterias.innerHTML =
+                    "<p>Nenhuma matéria cadastrada.</p>";
+
+                return;
+            }
+
+            materias.forEach(materia => {
+
+                listaMaterias.innerHTML += `
                     <p>
-                        ID: ${aula.id_aula} - ${aula.materia}
+                        <strong>ID ${materia.id_aula}</strong> -
+                        ${materia.materia}
                     </p>
                 `;
+
             });
 
         } catch (erro) {
 
             console.log(erro);
 
-            alert("Erro ao carregar matérias");
+            listaMaterias.innerHTML =
+                "<p>Erro ao carregar matérias.</p>";
         }
+
     }
 
-
-
-    // ========================================
-    // SALVAR / EDITAR
-    // ========================================
-
-    form.addEventListener("submit", async (e) => {
-
-        e.preventDefault();
-
-        const payload = {
-
-            nome_aulas: document.getElementById("nome").value.trim(),
-
-            descricao: document.getElementById("descricao").value.trim(),
-
-            link: document.getElementById("link").value.trim(),
-
-            id_aula: document.getElementById("materia").value
-        };
-
-
-        // VALIDAÇÃO
-
-        if (
-            !payload.nome_aulas ||
-            !payload.descricao ||
-            !payload.link ||
-            !payload.id_aula
-        ) {
-
-            alert("Preencha todos os campos");
-
-            return;
-        }
-
+    // ================================
+    // CARREGA VIDEOAULAS
+    // ================================
+    async function carregarVideoAulas() {
 
         try {
 
-            const url = editandoId
-                ? `${API}/${editandoId}`
-                : API;
+            const resposta = await fetch(API);
 
-            const metodo = editandoId
-                ? "PUT"
-                : "POST";
+            if (!resposta.ok) {
+                throw new Error("Erro ao buscar videoaulas");
+            }
 
-
-            const resposta = await fetch(url, {
-
-                method: metodo,
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(payload)
-            });
-
-
-            const dados = await resposta.json();
-
-            alert(dados.message || "Salvo com sucesso");
-
-
-            form.reset();
-
-            editandoId = null;
-
-            carregar();
-
-        } catch (erro) {
-
-            console.log(erro);
-
-            alert("Erro ao salvar");
-        }
-    });
-
-
-
-    // ========================================
-    // LISTAR VIDEOAULAS
-    // ========================================
-
-    async function carregar() {
-
-        try {
-
-            const res = await fetch(API);
-
-            const data = await res.json();
+            const videos = await resposta.json();
 
             tabela.innerHTML = "";
 
+            if (videos.length === 0) {
 
-            data.forEach(v => {
+                tabela.innerHTML = `
+                    <tr>
+                        <td colspan="4">
+                            Nenhuma videoaula cadastrada.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+            videos.forEach(video => {
 
                 tabela.innerHTML += `
-
                     <tr>
 
-                        <td>${v.nome_aulas}</td>
+                        <td>${video.nome_aulas}</td>
 
-                        <td>${v.descricao}</td>
+                        <td>${video.descricao}</td>
 
-                        <td>${v.materia || "Sem matéria"}</td>
+                        <td>${video.materia}</td>
 
                         <td>
 
-                            <button onclick="editar(${v.id_materias})">
+                            <button onclick="editar(${video.id_materias})">
                                 Editar
                             </button>
 
-                            <button onclick="excluir(${v.id_materias})">
+                            <button onclick="excluir(${video.id_materias})">
                                 Excluir
                             </button>
 
@@ -228,113 +175,176 @@
 
                     </tr>
                 `;
+
             });
 
         } catch (erro) {
 
             console.log(erro);
 
-            alert("Erro ao carregar dados");
+            alert("Erro ao carregar videoaulas.");
+
         }
+
     }
 
+    // ================================
+    // SALVAR
+    // ================================
+    form.addEventListener("submit", async function (e) {
 
+        e.preventDefault();
 
-    // ========================================
+        const dados = {
+
+            nome_aulas: document.getElementById("nome").value.trim(),
+
+            descricao: document.getElementById("descricao").value.trim(),
+
+            link: document.getElementById("link").value.trim(),
+
+            id_aula: Number(document.getElementById("materia").value)
+
+        };
+
+        if (
+            dados.nome_aulas === "" ||
+            dados.descricao === "" ||
+            dados.link === "" ||
+            !dados.id_aula
+        ) {
+
+            alert("Preencha todos os campos.");
+
+            return;
+
+        }
+
+        try {
+
+            const resposta = await fetch(
+
+                editandoId
+                    ? `${API}/${editandoId}`
+                    : API,
+
+                {
+
+                    method: editandoId ? "PUT" : "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(dados)
+
+                }
+
+            );
+
+            const resultado = await resposta.json();
+
+            alert(resultado.message);
+
+            form.reset();
+
+            editandoId = null;
+
+            carregarVideoAulas();
+
+        } catch (erro) {
+
+            console.log(erro);
+
+            alert("Erro ao salvar.");
+
+        }
+
+    });
+
+    // ================================
     // EDITAR
-    // ========================================
-
+    // ================================
     async function editar(id) {
 
         try {
 
-            const res = await fetch(API);
+            const resposta = await fetch(API);
 
-            const data = await res.json();
+            const videos = await resposta.json();
 
+            const video = videos.find(v => v.id_materias == id);
 
-            // CORREÇÃO AQUI
-            const v = data.find(x => x.id_materias == id);
+            if (!video) {
 
-            if (!v) {
-
-                alert("Registro não encontrado");
+                alert("Videoaula não encontrada.");
 
                 return;
-            }
 
+            }
 
             editandoId = id;
 
-            document.getElementById("nome").value = v.nome_aulas;
+            document.getElementById("nome").value = video.nome_aulas;
 
-            document.getElementById("descricao").value = v.descricao;
+            document.getElementById("descricao").value = video.descricao;
 
-            document.getElementById("link").value = v.link;
+            document.getElementById("link").value = video.link;
 
-            document.getElementById("materia").value = v.id_aula;
+            document.getElementById("materia").value = video.id_aula;
 
-
-            // sobe a tela
             window.scrollTo({
 
                 top: 0,
 
                 behavior: "smooth"
+
             });
 
         } catch (erro) {
 
             console.log(erro);
 
-            alert("Erro ao editar");
         }
+
     }
 
-
-
-    // ========================================
+    // ================================
     // EXCLUIR
-    // ========================================
-
+    // ================================
     async function excluir(id) {
 
-        const confirmar = confirm(
-            "Deseja realmente excluir?"
-        );
+        const confirmar = confirm("Deseja excluir esta videoaula?");
 
         if (!confirmar) return;
-
 
         try {
 
             await fetch(`${API}/${id}`, {
 
                 method: "DELETE"
+
             });
 
-            alert("Excluído com sucesso");
+            alert("Videoaula excluída.");
 
-            carregar();
+            carregarVideoAulas();
 
         } catch (erro) {
 
             console.log(erro);
 
-            alert("Erro ao excluir");
+            alert("Erro ao excluir.");
+
         }
+
     }
 
-
-
-    // ========================================
+    // ================================
     // INICIAR
-    // ========================================
-
-    carregarmaterias();
-
-    carregar();
-
+    // ================================
+    carregarMaterias();
+    carregarVideoAulas();
 </script>
 
 </html>

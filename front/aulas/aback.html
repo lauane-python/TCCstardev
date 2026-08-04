@@ -52,7 +52,7 @@
                 <p class="card-aula amarelo"><a href="/front/aulas/alinguagens.html" target="_blank"
                         class="hrefs_au">Linguagem de Programação</a></p>
             </section>
-            <section class="listaAulas">
+            <section id="listaAulas" class="listaAulas">
                 <p>Carregando aula...</p>
             </section>
         </section>
@@ -85,12 +85,12 @@
         // AULAS CADASTRADAS NA INTRANET
         // ===============================
 
-        const API = "http://10.111.9.17:3000/videoaulas";
+        const API = "http://10.111.9.26:3000/videoaulas";
 
         // ID DA MATÉRIA BACK-END
         const ID_MATERIA = 1;
 
-        const lista = document.getElementById("listaAulas");
+        const lista = document.querySelector(".listaAulas");
 
         async function carregarAulas() {
 
