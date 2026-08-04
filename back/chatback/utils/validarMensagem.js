@@ -1,11 +1,26 @@
-function validarMensagem(texto) {
-    if (!texto) {
+/**
+ * ==========================================
+ * DEV MENTOR
+ * Validação de mensagens
+ * ==========================================
+ */
+function validarMensagem(mensagem) {
+    // mensagem inexistente
+    if (mensagem === undefined || mensagem === null) {
         return false;
     }
-    if (texto.trim() === "") {
+    // precisa ser string
+    if (typeof mensagem !== "string") {
         return false;
     }
-    if (texto.length > 500) {
+    // remove espaços do começo/fim
+    mensagem = mensagem.trim();
+    // mensagem vazia
+    if (mensagem.length === 0) {
+        return false;
+    }
+    // limite máximo
+    if (mensagem.length > 500) {
         return false;
     }
     return true;
