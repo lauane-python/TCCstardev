@@ -66,7 +66,15 @@
 
         const telefoneRegex = /^\d{10,11}$/;
 
-        if (nome.trim() === "") {
+       
+        document.getElementById("btn_salvar_cadastro").addEventListener("click", async () => {
+
+        const nome = document.getElementById("input_nome").value.trim();
+        const email = document.getElementById("input_email").value.trim();
+        const telefone = document.getElementById("input_telefone").value.replace(/\D/g, "");
+        const senha = document.getElementById("input_senha").value;
+
+        if (nome === "") {
             alert("Digite seu nome.");
             return;
         }
@@ -85,36 +93,33 @@
             alert("A senha deve conter no mínimo 8 caracteres, letra maiúscula, minúscula, número e caractere especial.");
             return;
         }
-        document.getElementById("btn_salvar_cadastro").addEventListener("click", async () => {
-            const nome = document.getElementById("input_nome").value;
-            const email = document.getElementById("input_email").value;
-            const senha = document.getElementById("input_senha").value;
-            const telefone = document.getElementById("input_telefone").value;
-            try {
-                const resposta = await fetch("http://10.111.9.27:3000/cadastro", {
-                    method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        nome: nome,
-                        email: email,
-                        senha: senha,
-                        telefone: telefone
-                    })
-                });
-                if (resposta.ok) {
-                    const dados = await resposta.json();
-                    alert(dados.resposta);
-                } else {
-                    alert("Algo deu errado!");
-                }
-            } catch (erro) {
-                console.log(erro);
-                alert("Erro ao conectar com o servidor.");
-            }
-        });
+
+        try {
+
+            const resposta = await fetch("http://10.111.9.27:3000/cadastro", {
+                method: "POST",
+                headers:{
+                    "Accept":"application/json",
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({
+                    nome,
+                    email,
+                    senha,
+                    telefone
+                })
+            });
+
+            const dados = await resposta.json();
+
+            alert(dados.resposta);
+            
+        } catch (erro) {
+            console.error(erro);
+            alert("Erro ao conectar com o servidor.");
+        }
+
+    });
     </script>
 </body>
 </html>

@@ -418,9 +418,12 @@ app.post('/videoaulas', verificarToken, async (req, res) => {
 
         // Link do YouTube
         const youtubeRegex =
-            /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[A-Za-z0-9_-]{11}$/;
+        /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})(\?.*)?$/;
 
-        if (!youtubeRegex.test(url)) {
+        if (
+            !url.includes("youtube.com/watch?v=") &&
+            !url.includes("youtu.be/")
+        ) {
             return res.status(400).json({
                 message: "Informe um link válido do YouTube."
             });

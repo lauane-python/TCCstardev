@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/front/style.css">
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
 </head>
-
+<!-- testa       -->
 <body id="body_index_cadastro">
     <header id="header_index_cadastro">
         <h1 id="h1_cadastro">Área Administrativa</h1>
@@ -83,6 +83,13 @@
 <script>
     const API = "http://10.111.9.27:3000/videoaulas";
     const API_MATERIAS = "http://10.111.9.27:3000/aulas";
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Você precisa fazer login novamente.");
+        window.location.href = "/front/login.html";
+    }
 
     let editandoId = null;
 
@@ -260,27 +267,19 @@
         }
 
         try {
+            const token = localStorage.getItem("token");
 
             const resposta = await fetch(
-
-                editandoId
-                    ? `${API}/${editandoId}`
-                    : API,
-
+                editandoId ? `${API}/${editandoId}` : API,
                 {
-
                     method: editandoId ? "PUT" : "POST",
-
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
                     },
-
                     body: JSON.stringify(dados)
-
                 }
-
             );
-
             const resultado = await resposta.json();
 
             alert(resultado.message);
@@ -354,7 +353,10 @@
 
             await fetch(`${API}/${id}`, {
 
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
 
             });
 
