@@ -81,7 +81,6 @@
 </body>
 
 <script>
-
     const API = "http://10.111.9.27:3000/videoaulas";
     const API_MATERIAS = "http://10.111.9.27:3000/aulas";
 
@@ -95,43 +94,26 @@
     // CARREGA AS MATÉRIAS
     // ================================
     async function carregarMaterias() {
-        const nome = dados.nome_aulas.trim();
-        const descricao = dados.descricao.trim();
-        const link = dados.link.trim();
 
-        if (nome.length < 5) {
-            alert("O nome da aula deve possuir pelo menos 5 caracteres.");
-            return;
-        }
-
-        if (descricao.length < 15) {
-            alert("A descrição deve possuir pelo menos 15 caracteres.");
-            return;
-        }
-
-        const youtubeRegex =
-        /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}/;
-
-        if (!youtubeRegex.test(link)) {
-            alert("Digite um link válido do YouTube.");
-            return;
-        }
         try {
 
             const resposta = await fetch(API_MATERIAS);
 
             if (!resposta.ok) {
-                throw new Error("Erro ao buscar matérias");
+                throw new Error("Erro ao buscar matérias.");
             }
 
             const materias = await resposta.json();
+
+            console.log("Matérias:", materias);
 
             listaMaterias.innerHTML = "";
 
             if (materias.length === 0) {
 
-                listaMaterias.innerHTML =
-                    "<p>Nenhuma matéria cadastrada.</p>";
+                listaMaterias.innerHTML = `
+                    <p>Nenhuma matéria cadastrada.</p>
+                `;
 
                 return;
             }
@@ -149,10 +131,11 @@
 
         } catch (erro) {
 
-            console.log(erro);
+            console.error(erro);
 
             listaMaterias.innerHTML =
                 "<p>Erro ao carregar matérias.</p>";
+
         }
 
     }
@@ -224,7 +207,6 @@
         }
 
     }
-
     // ================================
     // SALVAR
     // ================================
@@ -252,9 +234,29 @@
         ) {
 
             alert("Preencha todos os campos.");
-
             return;
 
+        }
+
+        // Validação do nome
+        if (dados.nome_aulas.length < 5) {
+            alert("O nome da aula deve possuir pelo menos 5 caracteres.");
+            return;
+        }
+
+        // Validação da descrição
+        if (dados.descricao.length < 15) {
+            alert("A descrição deve possuir pelo menos 15 caracteres.");
+            return;
+        }
+
+        // Aceita somente links do YouTube
+        const youtubeRegex =
+        /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}/;
+
+        if (!youtubeRegex.test(dados.link)) {
+            alert("Digite um link válido do YouTube.");
+            return;
         }
 
         try {
@@ -315,7 +317,6 @@
             if (!video) {
 
                 alert("Videoaula não encontrada.");
-
                 return;
 
             }
@@ -323,19 +324,13 @@
             editandoId = id;
 
             document.getElementById("nome").value = video.nome_aulas;
-
             document.getElementById("descricao").value = video.descricao;
-
             document.getElementById("link").value = video.link;
-
             document.getElementById("materia").value = video.id_aula;
 
             window.scrollTo({
-
                 top: 0,
-
                 behavior: "smooth"
-
             });
 
         } catch (erro) {
