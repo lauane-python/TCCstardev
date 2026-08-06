@@ -25,15 +25,32 @@
         <form id="formVideo">
             <label class="label_admin" id="label_nomeaula">Nome da Aula</label>
             <br>
-            <input type="text" id="nome" required>
+            <input
+                type="text"
+                id="nome"
+                required
+                minlength="5"
+                maxlength="100"
+                pattern=".*\S.*"
+            >
             <br>
             <label class="label_admin" id="label_descricao">Descrição</label>
             <br>
-            <textarea id="descricao" required></textarea>
+            <textarea
+                id="descricao"
+                required
+                minlength="15"
+                maxlength="500"
+            ></textarea>
             <br>
             <label class="label_admin" id="label_linkvideo">Link do vídeo</label>
             <br>
-            <input type="text" id="link" required>
+            <input
+                type="url"
+                id="link"
+                required
+                placeholder="https://www.youtube.com/watch?v=..."
+            >
             <br>
             <label id="label_idmateria">ID da matéria</label>
             <br>
@@ -65,8 +82,8 @@
 
 <script>
 
-    const API = "http://10.111.9.26:3000/videoaulas";
-    const API_MATERIAS = "http://10.111.9.26:3000/aulas";
+    const API = "http://10.111.9.27:3000/videoaulas";
+    const API_MATERIAS = "http://10.111.9.27:3000/aulas";
 
     let editandoId = null;
 
@@ -78,7 +95,27 @@
     // CARREGA AS MATÉRIAS
     // ================================
     async function carregarMaterias() {
+        const nome = dados.nome_aulas.trim();
+        const descricao = dados.descricao.trim();
+        const link = dados.link.trim();
 
+        if (nome.length < 5) {
+            alert("O nome da aula deve possuir pelo menos 5 caracteres.");
+            return;
+        }
+
+        if (descricao.length < 15) {
+            alert("A descrição deve possuir pelo menos 15 caracteres.");
+            return;
+        }
+
+        const youtubeRegex =
+        /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}/;
+
+        if (!youtubeRegex.test(link)) {
+            alert("Digite um link válido do YouTube.");
+            return;
+        }
         try {
 
             const resposta = await fetch(API_MATERIAS);

@@ -75,8 +75,13 @@ app.post("/cadastro", async (req, res) => {
         if (senhaTrim === "") {
             return res.json({ resposta: "Preencha uma senha" });
         }
-        if (senhaTrim.length < 6) {
-            return res.json({ resposta: "A senha deve ter pelo menos 6 caracteres" });
+        const senhaRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/;
+
+        if (!senhaRegex.test(senhaTrim)) {
+            return res.json({
+                resposta: "A senha deve possuir no mínimo 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caractere especial."
+            });
         }
         if (email.length < 6) {
             return res.json({ resposta: "Preencha o email corretamente" });
@@ -84,8 +89,12 @@ app.post("/cadastro", async (req, res) => {
         if (nome.length < 6) {
             return res.json({ resposta: "Preencha o nome completo" });
         }
-        if (telefone.length <= 12) {
-            return res.json({ resposta: "Preencha o telefone corretamente" });
+        const telefoneRegex = /^\d{10,11}$/;
+
+        if (!telefoneRegex.test(telefone)) {
+            return res.json({
+                resposta: "Digite um telefone válido contendo apenas números."
+            });
         }
         // verificar email existente
         const sqlSelect = `SELECT * FROM cadastro WHERE email = ?`;
@@ -114,6 +123,17 @@ app.post("/login", async (req, res) => {
         const { email, senha } = req.body;
         const emailTrim = email?.trim();
         const senhaTrim = senha?.trim();
+        if (!emailTrim || !senhaTrim) {
+            return res.json({
+                resposta: "Preencha email e senha."
+            });
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailTrim)) {
+            return res.json({
+                resposta: "Digite um email válido."
+            });
+        }
         const sql = `SELECT * FROM cadastro WHERE email=?`;
         const [resultado] = await conexao.query(sql, [emailTrim]);
         if (resultado.length === 0) {
@@ -360,9 +380,10 @@ app.get('/videoaulas', async (req, res) => {
         });
     }
 });
-// CADASTRAR
-app.post('/videoaulas', async (req, res) => {
+// CADASTRAR VIDEOAULA
+app.post('/videoaulas', verificarToken, async (req, res) => {
     try {
+
         const {
             nome_aulas,
             descricao,
@@ -370,95 +391,157 @@ app.post('/videoaulas', async (req, res) => {
             id_aula
         } = req.body;
 
-        if (
-            !nome_aulas ||
-            !descricao ||
-            !link ||
-            !id_aula
-        ) {
+        const nome = nome_aulas?.trim();
+        const desc = descricao?.trim();
+        const url = link?.trim();
+
+        // Verifica campos vazios
+        if (!nome || !desc || !url || !id_aula) {
             return res.status(400).json({
-                message: "Preencha todos os campos"
+                message: "Preencha todos os campos."
             });
         }
-        // VERIFICA FK
+
+        // Nome
+        if (nome.length < 5) {
+            return res.status(400).json({
+                message: "O nome da aula deve possuir pelo menos 5 caracteres."
+            });
+        }
+
+        // Descrição
+        if (desc.length < 15) {
+            return res.status(400).json({
+                message: "A descrição deve possuir pelo menos 15 caracteres."
+            });
+        }
+
+        // Link do YouTube
+        const youtubeRegex =
+            /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[A-Za-z0-9_-]{11}$/;
+
+        if (!youtubeRegex.test(url)) {
+            return res.status(400).json({
+                message: "Informe um link válido do YouTube."
+            });
+        }
+
+        // Verifica se a matéria existe
         const [aulaExiste] = await conexao.query(
-            'SELECT * FROM aulas WHERE id_aula=?',
+            "SELECT * FROM aulas WHERE id_aula = ?",
             [id_aula]
         );
-        if (aulaExiste.length === 0) {
 
+        if (aulaExiste.length === 0) {
             return res.status(400).json({
-                message: "ID da aula não existe"
+                message: "ID da aula não existe."
             });
         }
-        const [result] = await conexao.query(`
-            INSERT INTO materias
-            (
-                nome_aulas,
-                descricao,
-                link,
-                id_aula
-            )
-            VALUES (?, ?, ?, ?)
-        `, [
-            nome_aulas,
-            descricao,
-            link,
-            id_aula
-        ]);
-        res.status(201).json({
-            message: "Matéria cadastrada com sucesso",
+
+        // Insere no banco
+        const [result] = await conexao.query(
+            `INSERT INTO materias
+            (nome_aulas, descricao, link, id_aula)
+            VALUES (?, ?, ?, ?)`,
+            [nome, desc, url, id_aula]
+        );
+
+        return res.status(201).json({
+            message: "Videoaula cadastrada com sucesso.",
             id: result.insertId
         });
+
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        return res.status(500).json({
             error: error.message
         });
     }
 });
-// EDITAR
-app.put('/videoaulas/:id', async (req, res) => {
+// EDITAR VIDEOAULA
+app.put('/videoaulas/:id', verificarToken, async (req, res) => {
     try {
+
         const { id } = req.params;
+
         const {
             nome_aulas,
             descricao,
             link,
             id_aula
         } = req.body;
-        const [result] = await conexao.query(`
-            UPDATE materias
-            SET
-                nome_aulas=?,
-                descricao=?,
-                link=?,
-                id_aula=?
-            WHERE id_materias=?
-        `, [
-            nome_aulas,
-            descricao,
-            link,
-            id_aula,
-            id
-        ]);
-        if (result.affectedRows === 0) {
-            return res.status(404).json({
-                message: "Matéria não encontrada"
+
+        const nome = nome_aulas?.trim();
+        const desc = descricao?.trim();
+        const url = link?.trim();
+
+        if (!nome || !desc || !url || !id_aula) {
+            return res.status(400).json({
+                message: "Preencha todos os campos."
             });
         }
-        res.json({
-            message: "Atualizado com sucesso"
+
+        if (nome.length < 5) {
+            return res.status(400).json({
+                message: "O nome da aula deve possuir pelo menos 5 caracteres."
+            });
+        }
+
+        if (desc.length < 15) {
+            return res.status(400).json({
+                message: "A descrição deve possuir pelo menos 15 caracteres."
+            });
+        }
+
+        const youtubeRegex =
+            /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[A-Za-z0-9_-]{11}$/;
+
+        if (!youtubeRegex.test(url)) {
+            return res.status(400).json({
+                message: "Informe um link válido do YouTube."
+            });
+        }
+
+        const [aulaExiste] = await conexao.query(
+            "SELECT * FROM aulas WHERE id_aula = ?",
+            [id_aula]
+        );
+
+        if (aulaExiste.length === 0) {
+            return res.status(400).json({
+                message: "ID da aula não existe."
+            });
+        }
+
+        const [result] = await conexao.query(
+            `UPDATE materias
+             SET nome_aulas = ?,
+                 descricao = ?,
+                 link = ?,
+                 id_aula = ?
+             WHERE id_materias = ?`,
+            [nome, desc, url, id_aula, id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: "Videoaula não encontrada."
+            });
+        }
+
+        return res.json({
+            message: "Videoaula atualizada com sucesso."
         });
+
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        return res.status(500).json({
             error: error.message
         });
     }
 });
 // EXCLUIR
-app.delete('/videoaulas/:id', async (req, res) => {
+app.delete('/videoaulas/:id', verificarToken, async (req, res) => {
     try {
         const { id } = req.params;
         const [result] = await conexao.query(
@@ -486,5 +569,5 @@ app.use(
     chatbotRoutes
 );
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://10.111.9.26:${PORT}`);
+    console.log(`Servidor rodando em http://10.111.9.27:${PORT}`);
 });

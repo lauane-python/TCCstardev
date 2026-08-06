@@ -38,7 +38,7 @@
                     <input type="email" id="input_email" name="email" autocomplete="email"
                         placeholder="Digite seu e-mail favorito">
                     <br>
-                    <label for="telefone" id="label_telefone">Telefone</label>
+                    <label for="telefone" type="tel" id="label_telefone">Telefone</label>
                     <br>
                     <input type="text" id="input_telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15">
                     <br>
@@ -59,13 +59,39 @@
         <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
     </footer>
     <script>
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        const senhaRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/;
+
+        const telefoneRegex = /^\d{10,11}$/;
+
+        if (nome.trim() === "") {
+            alert("Digite seu nome.");
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            alert("Digite um email válido.");
+            return;
+        }
+
+        if (!telefoneRegex.test(telefone)) {
+            alert("Digite um telefone válido.");
+            return;
+        }
+
+        if (!senhaRegex.test(senha)) {
+            alert("A senha deve conter no mínimo 8 caracteres, letra maiúscula, minúscula, número e caractere especial.");
+            return;
+        }
         document.getElementById("btn_salvar_cadastro").addEventListener("click", async () => {
             const nome = document.getElementById("input_nome").value;
             const email = document.getElementById("input_email").value;
             const senha = document.getElementById("input_senha").value;
             const telefone = document.getElementById("input_telefone").value;
             try {
-                const resposta = await fetch("http://10.111.9.26:3000/cadastro", {
+                const resposta = await fetch("http://10.111.9.27:3000/cadastro", {
                     method: "POST",
                     headers: {
                         "Accept": "application/json",

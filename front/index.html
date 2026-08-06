@@ -43,6 +43,19 @@
                 permitindo uma jornada de aprendizado progressiva, personalizada e alinhada ao ritmo de cada usuário.
             </p>
         </section>
+        <!-- <section class="video-hero">
+            <video autoplay muted loop playsinline class="video-hero__media">
+                <source src="video/meu-video.mp4" type="video/mp4">
+                opcional, para melhor suporte -->
+                <!-- <source src="video/meu-video.webm" type="video/webm">
+                Seu navegador não suporta vídeo em HTML5.
+            </video>
+
+            <div class="video-hero__overlay">
+                <h1>Seu título aqui</h1>
+                <p>Uma frase de efeito, como no site de referência.</p>
+            </div>
+        </section> -->
         <section id="ftcriadoras">
             <!--eu-->
             <div class="card-3d" data-aos="fade-up">
@@ -99,7 +112,7 @@
             const email = document.getElementById("email").value;
             const comentario = document.getElementById("comentarios").value;
             try {
-                const resposta = await fetch("http://10.111.9.26:3000/contato", {
+                const resposta = await fetch("http://10.111.9.27:3000/contato", {
                     method: "POST",
                     headers: {
                         "Accept": "application/json",
