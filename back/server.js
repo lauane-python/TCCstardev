@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const cors = require("cors");
+const path = require("path");
 const conexao = require("./db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -572,5 +573,5 @@ app.use(
     chatbotRoutes
 );
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://10.111.9.27:${PORT}`);
+    console.log(`Servidor rodando em http://10.111.9.16:${PORT}`);
 });

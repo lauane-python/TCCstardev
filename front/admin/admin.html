@@ -3,25 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrativa</title>
-
+    <title>Administração</title>
     <link rel="stylesheet" href="/front/style.css">
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
 </head>
-<!-- testa       -->
-<body id="body_index_cadastro">
-    <header id="header_index_cadastro">
-        <h1 id="h1_cadastro">Área Administrativa</h1>
-        <button><a href="/front/index.html" target="_blank">index</a></button>
+<body class="body_index_cadastro">
+    <header class="header_index_cadastro">
+        <figure class="logo"><a href="/front/index.html" class="hrefs"><img src="/front/img/logo.svg" alt="LOGOTIPO StarDev"></figure>
+        <button><a href="/front/index.html" target="_blank">tela inicial</a></button>
         <button><a href="/front/login.html" target="_blank">login</a></button>
         <button><a href="/front/cadastro.html" target="_blank">cadastro</a></button>
-        <button><a href="/front/esqueci.html" target="_blank">esqueci</a></button>
+        <button><a href="/front/admin/editarAulas.html" target="_blank">editar Aulas</a></button>
         <button><a href="/front/aulas.html" target="_blank">aulas</a></button>
     </header>
-    <main> 
-            <!-- ========================= -->
+    <main>
         <!-- FORMULÁRIO -->
-        <!-- ========================= -->
         <form id="formVideo">
             <label class="label_admin" id="label_nomeaula">Nome da Aula</label>
             <br>
@@ -59,9 +55,6 @@
             <button type="submit">Salvar</button>
         </form>
         <hr>
-        <!-- ========================= -->
-        <!-- TABELA -->
-        <!-- ========================= -->
         <table border="1">
             <thead>
                 <tr>
@@ -77,308 +70,305 @@
         </table>
     </main>
     <footer id="footer_index_cadastro">Se você está lendo isso, parabéns você é um admin</footer>
+    <script>
+        const API = "http://10.111.9.16:3000/videoaulas";
+        const API_MATERIAS = "http://10.111.9.16:3000/aulas";
 
-</body>
+        const token = localStorage.getItem("token");
 
-<script>
-    const API = "http://10.111.9.27:3000/videoaulas";
-    const API_MATERIAS = "http://10.111.9.27:3000/aulas";
+        if (!token) {
+            alert("Você precisa fazer login novamente.");
+            window.location.href = "/front/login.html";
+        }
 
-    const token = localStorage.getItem("token");
+        let editandoId = null;
 
-    if (!token) {
-        alert("Você precisa fazer login novamente.");
-        window.location.href = "/front/login.html";
-    }
+        const form = document.getElementById("formVideo");
+        const tabela = document.getElementById("tabela");
+        const listaMaterias = document.getElementById("listamaterias");
 
-    let editandoId = null;
+        // ================================
+        // CARREGA AS MATÉRIAS
+        // ================================
+        async function carregarMaterias() {
 
-    const form = document.getElementById("formVideo");
-    const tabela = document.getElementById("tabela");
-    const listaMaterias = document.getElementById("listamaterias");
+            try {
 
-    // ================================
-    // CARREGA AS MATÉRIAS
-    // ================================
-    async function carregarMaterias() {
+                const resposta = await fetch(API_MATERIAS);
 
-        try {
+                if (!resposta.ok) {
+                    throw new Error("Erro ao buscar matérias.");
+                }
 
-            const resposta = await fetch(API_MATERIAS);
+                const materias = await resposta.json();
 
-            if (!resposta.ok) {
-                throw new Error("Erro ao buscar matérias.");
+                console.log("Matérias:", materias);
+
+                listaMaterias.innerHTML = "";
+
+                if (materias.length === 0) {
+
+                    listaMaterias.innerHTML = `
+                        <p>Nenhuma matéria cadastrada.</p>
+                    `;
+
+                    return;
+                }
+
+                materias.forEach(materia => {
+
+                    listaMaterias.innerHTML += `
+                        <p>
+                            <strong>ID ${materia.id_aula}</strong> -
+                            ${materia.materia}
+                        </p>
+                    `;
+
+                });
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                listaMaterias.innerHTML =
+                    "<p>Erro ao carregar matérias.</p>";
+
             }
 
-            const materias = await resposta.json();
+        }
 
-            console.log("Matérias:", materias);
+        // ================================
+        // CARREGA VIDEOAULAS
+        // ================================
+        async function carregarVideoAulas() {
 
-            listaMaterias.innerHTML = "";
+            try {
 
-            if (materias.length === 0) {
+                const resposta = await fetch(API);
 
-                listaMaterias.innerHTML = `
-                    <p>Nenhuma matéria cadastrada.</p>
-                `;
+                if (!resposta.ok) {
+                    throw new Error("Erro ao buscar videoaulas");
+                }
 
+                const videos = await resposta.json();
+
+                tabela.innerHTML = "";
+
+                if (videos.length === 0) {
+
+                    tabela.innerHTML = `
+                        <tr>
+                            <td colspan="4">
+                                Nenhuma videoaula cadastrada.
+                            </td>
+                        </tr>
+                    `;
+
+                    return;
+                }
+
+                videos.forEach(video => {
+
+                    tabela.innerHTML += `
+                        <tr>
+
+                            <td>${video.nome_aulas}</td>
+
+                            <td>${video.descricao}</td>
+
+                            <td>${video.materia}</td>
+
+                            <td>
+
+                                <button onclick="editar(${video.id_materias})">
+                                    Editar
+                                </button>
+
+                                <button onclick="excluir(${video.id_materias})">
+                                    Excluir
+                                </button>
+
+                            </td>
+
+                        </tr>
+                    `;
+
+                });
+
+            } catch (erro) {
+
+                console.log(erro);
+
+                alert("Erro ao carregar videoaulas.");
+
+            }
+
+        }
+        // ================================
+        // SALVAR
+        // ================================
+        form.addEventListener("submit", async function (e) {
+
+            e.preventDefault();
+
+            const dados = {
+
+                nome_aulas: document.getElementById("nome").value.trim(),
+
+                descricao: document.getElementById("descricao").value.trim(),
+
+                link: document.getElementById("link").value.trim(),
+
+                id_aula: Number(document.getElementById("materia").value)
+
+            };
+
+            if (
+                dados.nome_aulas === "" ||
+                dados.descricao === "" ||
+                dados.link === "" ||
+                !dados.id_aula
+            ) {
+
+                alert("Preencha todos os campos.");
+                return;
+
+            }
+
+            // Validação do nome
+            if (dados.nome_aulas.length < 5) {
+                alert("O nome da aula deve possuir pelo menos 5 caracteres.");
                 return;
             }
 
-            materias.forEach(materia => {
-
-                listaMaterias.innerHTML += `
-                    <p>
-                        <strong>ID ${materia.id_aula}</strong> -
-                        ${materia.materia}
-                    </p>
-                `;
-
-            });
-
-        } catch (erro) {
-
-            console.error(erro);
-
-            listaMaterias.innerHTML =
-                "<p>Erro ao carregar matérias.</p>";
-
-        }
-
-    }
-
-    // ================================
-    // CARREGA VIDEOAULAS
-    // ================================
-    async function carregarVideoAulas() {
-
-        try {
-
-            const resposta = await fetch(API);
-
-            if (!resposta.ok) {
-                throw new Error("Erro ao buscar videoaulas");
-            }
-
-            const videos = await resposta.json();
-
-            tabela.innerHTML = "";
-
-            if (videos.length === 0) {
-
-                tabela.innerHTML = `
-                    <tr>
-                        <td colspan="4">
-                            Nenhuma videoaula cadastrada.
-                        </td>
-                    </tr>
-                `;
-
+            // Validação da descrição
+            if (dados.descricao.length < 15) {
+                alert("A descrição deve possuir pelo menos 15 caracteres.");
                 return;
             }
 
-            videos.forEach(video => {
+            // Aceita somente links do YouTube
+            const youtubeRegex =
+            /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}/;
 
-                tabela.innerHTML += `
-                    <tr>
+            if (!youtubeRegex.test(dados.link)) {
+                alert("Digite um link válido do YouTube.");
+                return;
+            }
 
-                        <td>${video.nome_aulas}</td>
+            try {
+                const token = localStorage.getItem("token");
 
-                        <td>${video.descricao}</td>
+                const resposta = await fetch(
+                    editandoId ? `${API}/${editandoId}` : API,
+                    {
+                        method: editandoId ? "PUT" : "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(dados)
+                    }
+                );
+                const resultado = await resposta.json();
 
-                        <td>${video.materia}</td>
+                alert(resultado.message);
 
-                        <td>
+                form.reset();
 
-                            <button onclick="editar(${video.id_materias})">
-                                Editar
-                            </button>
+                editandoId = null;
 
-                            <button onclick="excluir(${video.id_materias})">
-                                Excluir
-                            </button>
+                carregarVideoAulas();
 
-                        </td>
+            } catch (erro) {
 
-                    </tr>
-                `;
+                console.log(erro);
 
-            });
+                alert("Erro ao salvar.");
 
-        } catch (erro) {
+            }
 
-            console.log(erro);
+        });
 
-            alert("Erro ao carregar videoaulas.");
+        // ================================
+        // EDITAR
+        // ================================
+        async function editar(id) {
+
+            try {
+
+                const resposta = await fetch(API);
+
+                const videos = await resposta.json();
+
+                const video = videos.find(v => v.id_materias == id);
+
+                if (!video) {
+
+                    alert("Videoaula não encontrada.");
+                    return;
+
+                }
+
+                editandoId = id;
+
+                document.getElementById("nome").value = video.nome_aulas;
+                document.getElementById("descricao").value = video.descricao;
+                document.getElementById("link").value = video.link;
+                document.getElementById("materia").value = video.id_aula;
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            } catch (erro) {
+
+                console.log(erro);
+
+            }
 
         }
 
-    }
-    // ================================
-    // SALVAR
-    // ================================
-    form.addEventListener("submit", async function (e) {
+        // ================================
+        // EXCLUIR
+        // ================================
+        async function excluir(id) {
 
-        e.preventDefault();
+            const confirmar = confirm("Deseja excluir esta videoaula?");
 
-        const dados = {
+            if (!confirmar) return;
 
-            nome_aulas: document.getElementById("nome").value.trim(),
+            try {
 
-            descricao: document.getElementById("descricao").value.trim(),
+                await fetch(`${API}/${id}`, {
 
-            link: document.getElementById("link").value.trim(),
-
-            id_aula: Number(document.getElementById("materia").value)
-
-        };
-
-        if (
-            dados.nome_aulas === "" ||
-            dados.descricao === "" ||
-            dados.link === "" ||
-            !dados.id_aula
-        ) {
-
-            alert("Preencha todos os campos.");
-            return;
-
-        }
-
-        // Validação do nome
-        if (dados.nome_aulas.length < 5) {
-            alert("O nome da aula deve possuir pelo menos 5 caracteres.");
-            return;
-        }
-
-        // Validação da descrição
-        if (dados.descricao.length < 15) {
-            alert("A descrição deve possuir pelo menos 15 caracteres.");
-            return;
-        }
-
-        // Aceita somente links do YouTube
-        const youtubeRegex =
-        /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}/;
-
-        if (!youtubeRegex.test(dados.link)) {
-            alert("Digite um link válido do YouTube.");
-            return;
-        }
-
-        try {
-            const token = localStorage.getItem("token");
-
-            const resposta = await fetch(
-                editandoId ? `${API}/${editandoId}` : API,
-                {
-                    method: editandoId ? "PUT" : "POST",
+                    method: "DELETE",
                     headers: {
-                        "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(dados)
-                }
-            );
-            const resultado = await resposta.json();
+                    }
 
-            alert(resultado.message);
+                });
 
-            form.reset();
+                alert("Videoaula excluída.");
 
-            editandoId = null;
+                carregarVideoAulas();
 
-            carregarVideoAulas();
+            } catch (erro) {
 
-        } catch (erro) {
+                console.log(erro);
 
-            console.log(erro);
-
-            alert("Erro ao salvar.");
-
-        }
-
-    });
-
-    // ================================
-    // EDITAR
-    // ================================
-    async function editar(id) {
-
-        try {
-
-            const resposta = await fetch(API);
-
-            const videos = await resposta.json();
-
-            const video = videos.find(v => v.id_materias == id);
-
-            if (!video) {
-
-                alert("Videoaula não encontrada.");
-                return;
+                alert("Erro ao excluir.");
 
             }
 
-            editandoId = id;
-
-            document.getElementById("nome").value = video.nome_aulas;
-            document.getElementById("descricao").value = video.descricao;
-            document.getElementById("link").value = video.link;
-            document.getElementById("materia").value = video.id_aula;
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        } catch (erro) {
-
-            console.log(erro);
-
         }
 
-    }
-
-    // ================================
-    // EXCLUIR
-    // ================================
-    async function excluir(id) {
-
-        const confirmar = confirm("Deseja excluir esta videoaula?");
-
-        if (!confirmar) return;
-
-        try {
-
-            await fetch(`${API}/${id}`, {
-
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-
-            });
-
-            alert("Videoaula excluída.");
-
-            carregarVideoAulas();
-
-        } catch (erro) {
-
-            console.log(erro);
-
-            alert("Erro ao excluir.");
-
-        }
-
-    }
-
-    // ================================
-    // INICIAR
-    // ================================
-    carregarMaterias();
-    carregarVideoAulas();
-</script>
-
+        // ================================
+        // INICIAR
+        // ================================
+        carregarMaterias();
+        carregarVideoAulas();
+    </script>
+</body>
 </html>

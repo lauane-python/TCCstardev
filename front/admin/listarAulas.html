@@ -9,8 +9,8 @@
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
 </head>
 
-<body>
-    <header id="header_index_cadastro">
+<body class="body_index_cadastro">
+    <header class="header_index_cadastro">
         <figure class="logo">
             <a href="/front/index.html" class="hrefs">
                 <img src="/front/img/logo.svg" alt="LOGOTIPO StarDev">
@@ -26,8 +26,7 @@
         <section>
             <h1>Aulas cadastradas</h1>
             <!-- Aqui é onde as aulas vão aparecer -->
-            <div id="listaAulas">
-            </div>
+            <div id="listaAulas"></div>
         </section>
     </main>
     <footer>
@@ -58,7 +57,7 @@
 
             try {
                 // faz requisição para o backend
-                const res = await fetch("http://10.111.9.27:3000/videoaulas");
+                const res = await fetch("http://10.111.9.16:3000/videoaulas");
 
                 // se der erro na resposta
                 if (!res.ok) {
@@ -88,7 +87,8 @@
                     // coloca o conteúdo dentro da div
                     // ⚠️ usa os nomes que vêm do banco:
                     // materia, duracao, qtd_aulas, id_aula
-                     const card = document.createElement("div");
+                    const card = document.createElement("div");
+                    card.className = "card-video";
 
                     card.innerHTML = `
 
@@ -99,7 +99,7 @@
                         <iframe
                             width="400"
                             height="220"
-                            src="${aula.link}"
+                            src="${converterLinkYoutube(aula.link)}"
                             frameborder="0"
                             allowfullscreen>
                         </iframe>
@@ -138,7 +138,7 @@
 
         // redireciona para outra página passando o ID
         function editar(id) {
-            window.location.href = `editar.html?id=${id}`;
+            window.location.href = `editarAulas.html?id=${id}`;
         }
 
 
@@ -154,7 +154,7 @@
 
             try {
                 // envia requisição DELETE para o backend
-                const res = await fetch(`http://10.111.9.27:3000/videoaulas/${id}`, {
+                const res = await fetch(`http://10.111.9.16:3000/videoaulas/${id}`, {
                     method: "DELETE",
                     headers: {
                         "Authorization": "Bearer " + token
@@ -181,7 +181,29 @@
         // =========================
         // 🚀 INICIAR
         // =========================
+        function converterLinkYoutube(link) {
 
+        if (!link) return "";
+
+        // Se já estiver no formato embed, não altera
+        if (link.includes("youtube.com/embed/")) {
+            return link;
+        }
+
+        // Link youtube.com/watch?v=
+        if (link.includes("youtube.com/watch?v=")) {
+            const id = link.split("v=")[1].split("&")[0];
+            return `https://www.youtube.com/embed/${id}`;
+        }
+
+        // Link youtu.be/
+        if (link.includes("youtu.be/")) {
+            const id = link.split("youtu.be/")[1].split("?")[0];
+            return `https://www.youtube.com/embed/${id}`;
+        }
+
+        return link;
+    }
         // chama a função quando abre a página
         carregarAulas();
 

@@ -334,7 +334,7 @@
     <!-- =====================================================
          HEADER
     ====================================================== -->
-    <header id="header_index_cadastro">
+    <header class="header_index_cadastro">
         <h2>
             Dashboard Administrativo
         </h2>
@@ -342,7 +342,7 @@
             <a href="/front/admin/feedback.html">
                 Feedbacks
             </a>
-            <a href="/front/admin/editarVideoaulas.html">
+            <a href="/front/admin/editarAulas.html">
                 Editar
             </a>
             <a href="/front/admin/listarAulas.html">
@@ -483,317 +483,316 @@
     <!-- =====================================================
          JAVASCRIPT
     ====================================================== -->
-    <script>
-        /* =================================================
-           VERIFICAÇÃO DO ADMIN
-        ================================================= */
-        const nivel = localStorage.getItem("nivel");
-        if (nivel !== "A") {
-            alert("Acesso negado");
-            window.location.href =
-                "../login.html";
-        }
-        function logout() {
-            localStorage.removeItem("token");
-            localStorage.removeItem("nivel");
-            window.location.href =
-                "../login.html";
-        }
-        /* =================================================
-           VARIÁVEIS
-        ================================================= */
-        let videoaulas = [];
-        let aulas = [];
+    
+</body>
+<script>
+    const nivel = localStorage.getItem("nivel");
+    if (nivel !== "A") {
+        alert("Acesso negado");
+        window.location.href =
+            "../login.html";
+    }
+    function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("nivel");
+        window.location.href =
+            "../login.html";
+    }
+    let videoaulas = [];
+    let aulas = [];
+    const API = "http://10.111.9.16:3000";
         /* =================================================
            CARREGAR VIDEOAULAS
         ================================================= */
-        async function carregarVideoaulas() {
-            try {
-                const resposta =
-                    await fetch("/videoaulas", {
-                        headers: {
-                            "Authorization":
-                                `Bearer ${localStorage.getItem("token")}`
-                        }
-                    });
-                if (!resposta.ok) {
-                    throw new Error(
-                        "Erro ao carregar videoaulas"
-                    );
-                }
-                videoaulas =
-                    await resposta.json();
-                mostrarVideoaulas();
-            } catch (erro) {
-                console.error(erro);
-                document.getElementById(
-                    "listaVideoaulas"
-                ).innerHTML = `
-                    <div class="mensagem-videoaulas">
-                        Não foi possível carregar as videoaulas.
-                    </div>
-                `;
+    async function carregarVideoaulas() {
+        try {
+            const resposta =
+                await fetch(`${API}/videoaulas`, {
+                    headers: {
+                        "Authorization":
+                            `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+            if (!resposta.ok) {
+                throw new Error(
+                    "Erro ao carregar videoaulas"
+                );
             }
+            videoaulas =
+                await resposta.json();
+            mostrarVideoaulas();
+        } catch (erro) {
+            console.error(erro);
+            document.getElementById(
+                "listaVideoaulas"
+            ).innerHTML = `
+                <div class="mensagem-videoaulas">
+                    Não foi possível carregar as videoaulas.
+                </div>
+            `;
         }
+    }
         /* =================================================
            CARREGAR MATÉRIAS
         ================================================= */
-        async function carregarMaterias() {
-            try {
-                const resposta =
-                    await fetch("/aulas", {
-                        headers: {
-                            "Authorization":
-                                `Bearer ${localStorage.getItem("token")}`
-                        }
-                    });
-                if (!resposta.ok) {
-                    throw new Error(
-                        "Erro ao carregar matérias"
-                    );
-                }
-                aulas =
-                    await resposta.json();
-                preencherMaterias();
-            } catch (erro) {
-                console.error(erro);
+    async function carregarMaterias() {
+        try {
+
+            const resposta = await fetch("http://10.111.9.16:3000/aulas");
+
+            if (!resposta.ok) {
+                throw new Error("Erro ao buscar matérias");
             }
+
+            const dados = await resposta.json();
+
+            console.log("MATÉRIAS RECEBIDAS:", dados);
+
+            aulas = dados;
+
+            preencherMaterias();
+
+        } catch (erro) {
+
+            console.error("ERRO NAS MATÉRIAS:", erro);
+
         }
+    }
         /* =================================================
            PREENCHER MATÉRIAS
         ================================================= */
-        function preencherMaterias() {
-            const filtro =
-                document.getElementById(
-                    "filtroMateria"
-                );
-            const select =
-                document.getElementById(
-                    "materiaAula"
-                );
-            aulas.forEach(aula => {
-                const opcaoFiltro =
-                    document.createElement("option");
-                opcaoFiltro.value =
-                    aula.id_aula;
-                opcaoFiltro.textContent =
-                    aula.materia;
-                filtro.appendChild(
-                    opcaoFiltro
-                );
-                const opcaoSelect =
-                    document.createElement("option");
-                opcaoSelect.value =
-                    aula.id_aula;
-                opcaoSelect.textContent =
-                    aula.materia;
-                select.appendChild(
-                    opcaoSelect
-                );
-            });
-        }
+    function preencherMaterias() {
+        const filtro =
+            document.getElementById(
+                "filtroMateria"
+            );
+        const select =
+            document.getElementById(
+                "materiaAula"
+            );
+        aulas.forEach(aula => {
+            const opcaoFiltro =
+                document.createElement("option");
+            opcaoFiltro.value =
+                aula.id_aula;
+            opcaoFiltro.textContent =
+                aula.materia;
+            filtro.appendChild(
+                opcaoFiltro
+            );
+            const opcaoSelect =
+                document.createElement("option");
+            opcaoSelect.value =
+                aula.id_aula;
+            opcaoSelect.textContent =
+                aula.materia;
+            select.appendChild(
+                opcaoSelect
+            );
+        });
+    }
         /* =================================================
            MOSTRAR VIDEOAULAS
         ================================================= */
-        function mostrarVideoaulas() {
-            const lista =
-                document.getElementById(
-                    "listaVideoaulas"
-                );
-            const pesquisa =
-                document.getElementById(
-                    "pesquisaVideo"
-                )
-                .value
-                .toLowerCase()
-                .trim();
-            const materia =
-                document.getElementById(
-                    "filtroMateria"
-                ).value;
-            const resultados =
-                videoaulas.filter(video => {
-                    const nome =
-                        (video.nome_aulas || "")
-                        .toLowerCase();
-                    const descricao =
+    function mostrarVideoaulas() {
+        const lista =
+            document.getElementById(
+                "listaVideoaulas"
+            );
+        const pesquisa =
+            document.getElementById(
+                "pesquisaVideo"
+            )
+            .value
+            .toLowerCase()
+            .trim();
+        const materia =
+            document.getElementById(
+                "filtroMateria"
+            ).value;
+        const resultados =
+            videoaulas.filter(video => {
+                const nome =
+                    (video.nome_aulas || "")
+                    .toLowerCase();
+                const descricao =
                         (video.descricao || "")
                         .toLowerCase();
-                    const nomeMateria =
-                        (video.materia || "")
-                        .toLowerCase();
-                    const correspondePesquisa =
-                        nome.includes(pesquisa)
-                        ||
-                        descricao.includes(pesquisa)
-                        ||
-                        nomeMateria.includes(pesquisa);
-                    const correspondeMateria =
-                        materia === ""
-                        ||
-                        String(video.id_aula) ===
-                        String(materia);
-                    return (
-                        correspondePesquisa
-                        &&
-                        correspondeMateria
-                    );
-                });
-            if (resultados.length === 0) {
-                lista.innerHTML = `
-                    <div class="mensagem-videoaulas">
-                        Nenhuma videoaula encontrada.
-                    </div>
-                `;
-                return;
-            }
-            lista.innerHTML = "";
-            resultados.forEach(video => {
-                const card =
-                    document.createElement("article");
-                card.className =
-                    "videoaula-card";
-                card.innerHTML = `
-                    <div class="videoaula-info">
-                        <span class="videoaula-materia">
-                            ${video.materia || "Sem matéria"}
-                        </span>
-                        <h2>
-                            ${video.nome_aulas}
-                        </h2>
-                        <p class="videoaula-descricao">
-                            ${video.descricao || "Sem descrição"}
-                        </p>
-                        <a
-                            class="videoaula-link"
-                            href="${video.link}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            🔗 Ver vídeo
-                        </a>
-                    </div>
-                    <div class="videoaula-acoes">
-                        <button
-                            class="btn-videoaula btn-ver-video"
-                            onclick="abrirVideo('${video.link}')"
-                        >
-                            Ver
-                        </button>
-                        <button
-                            class="btn-videoaula btn-editar-video"
-                            onclick="abrirModal(${video.id_materias})"
-                        >
-                            Editar
-                        </button>
-                        <button
-                            class="btn-videoaula btn-excluir-video"
-                            onclick="excluirVideo(${video.id_materias})"
-                        >
-                            Excluir
-                        </button>
-                    </div>
-                `;
-                lista.appendChild(card);
+                const nomeMateria =
+                    (video.materia || "")
+                    .toLowerCase();
+                const correspondePesquisa =
+                    nome.includes(pesquisa)
+                    ||
+                    descricao.includes(pesquisa)
+                    ||
+                    nomeMateria.includes(pesquisa);
+                const correspondeMateria =
+                    materia === ""
+                    ||
+                    String(video.id_aula) ===
+                    String(materia);
+                return (
+                    correspondePesquisa
+                    &&
+                    correspondeMateria
+                );
             });
+        if (resultados.length === 0) {
+            lista.innerHTML = `
+                <div class="mensagem-videoaulas">
+                    Nenhuma videoaula encontrada.
+                </div>
+            `;
+            return;
         }
+        lista.innerHTML = "";
+        resultados.forEach(video => {
+            const card =
+                document.createElement("article");
+            card.className =
+                "videoaula-card";
+            card.innerHTML = `
+                <div class="videoaula-info">
+                    <span class="videoaula-materia">
+                        ${video.materia || "Sem matéria"}
+                    </span>
+                    <h2>
+                        ${video.nome_aulas}
+                    </h2>
+                    <p class="videoaula-descricao">
+                        ${video.descricao || "Sem descrição"}
+                    </p>
+                    <a
+                    class="videoaula-link"
+                        href="${video.link}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        🔗 Ver vídeo
+                    </a>
+                </div>
+                <div class="videoaula-acoes">
+                    <button
+                        class="btn-videoaula btn-ver-video"
+                        onclick="abrirVideo('${video.link}')"
+                    >
+                        Ver
+                    </button>
+                    <button
+                        class="btn-videoaula btn-editar-video"
+                        onclick="abrirModal(${video.id_materias})"
+                    >
+                        Editar
+                    </button>
+                    <button
+                        class="btn-videoaula btn-excluir-video"
+                        onclick="excluirVideo(${video.id_materias})"
+                    >
+                        Excluir
+                    </button>
+                </div>
+            `;
+            lista.appendChild(card);
+        });
+    }
         /* =================================================
            ABRIR VÍDEO
         ================================================= */
-        function abrirVideo(link) {
-            window.open(
-                link,
-                "_blank"
-            );
-        }
+    function abrirVideo(link) {
+        window.open(
+            link,
+            "_blank"
+        );
+    }
         /* =================================================
            ABRIR MODAL
         ================================================= */
-        function abrirModal(id) {
-            const video =
-                videoaulas.find(
-                    item =>
-                        item.id_materias == id
-                );
-            if (!video) {
-                alert(
-                    "Videoaula não encontrada."
-                );
-                return;
-            }
-            document.getElementById(
-                "idMaterias"
-            ).value =
-                video.id_materias;
-            document.getElementById(
-                "nomeAula"
-            ).value =
-                video.nome_aulas;
-            document.getElementById(
-                "materiaAula"
-            ).value =
-                video.id_aula;
-            document.getElementById(
-                "linkAula"
-            ).value =
-                video.link;
-            document.getElementById(
-                "descricaoAula"
-            ).value =
-                video.descricao;
-            document.getElementById(
-                "modalEditarVideo"
-            ).classList.add(
-                "ativo"
+    function abrirModal(id) {
+        const video =
+            videoaulas.find(
+                item =>
+                    item.id_materias == id
             );
+        if (!video) {
+            alert(
+                "Videoaula não encontrada."
+            );
+            return;
         }
+        document.getElementById(
+            "idMaterias"
+        ).value =
+            video.id_materias;
+        document.getElementById(
+            "nomeAula"
+        ).value =
+            video.nome_aulas;
+        document.getElementById(
+            "materiaAula"
+        ).value =
+            video.id_aula;
+        document.getElementById(
+            "linkAula"
+        ).value =
+            video.link;
+        document.getElementById(
+            "descricaoAula"
+        ).value =
+            video.descricao;
+        document.getElementById(
+            "modalEditarVideo"
+        ).classList.add(
+            "ativo"
+        );
+    }
         /* =================================================
            FECHAR MODAL
         ================================================= */
-        function fecharModal() {
-            document.getElementById(
-                "modalEditarVideo"
-            ).classList.remove(
-                "ativo"
-            );
-        }
+    function fecharModal() {
+        document.getElementById(
+            "modalEditarVideo"
+        ).classList.remove(
+            "ativo"
+        );
+    }
         /* =================================================
            SALVAR EDIÇÃO
         ================================================= */
-        document
-            .getElementById(
-                "formEditarVideo"
-            )
-            .addEventListener(
-                "submit",
-                async function (event) {
-                    event.preventDefault();
-                    const id =
+    document
+        .getElementById(
+            "formEditarVideo"
+        )
+        .addEventListener(
+            "submit",
+            async function (event) {
+                event.preventDefault();
+                const id =
+                    document.getElementById(
+                        "idMaterias"
+                    ).value;
+                const dados = {
+                    nome_aulas:
                         document.getElementById(
-                            "idMaterias"
-                        ).value;
-                    const dados = {
-                        nome_aulas:
-                            document.getElementById(
-                                "nomeAula"
-                            ).value.trim(),
-                        descricao:
-                            document.getElementById(
-                                "descricaoAula"
-                            ).value.trim(),
-                        link:
-                            document.getElementById(
-                                "linkAula"
-                            ).value.trim(),
-                        id_aula:
-                            document.getElementById(
-                                "materiaAula"
-                            ).value
-                    };
-                    try {
-                        const resposta =
-                            await fetch(
-                                `/videoaulas/${id}`,
+                            "nomeAula"
+                        ).value.trim(),
+                    descricao:
+                        document.getElementById(
+                            "descricaoAula"
+                        ).value.trim(),
+                    link:
+                        document.getElementById(
+                            "linkAula"
+                        ).value.trim(),
+                    id_aula:
+                        document.getElementById(
+                            "materiaAula"
+                        ).value
+                };
+                try {
+                    const resposta =
+                        await fetch(
+                            `/videoaulas/${id}`,
                                 {
                                     method: "PUT",
                                     headers: {
@@ -807,126 +806,126 @@
                                             dados
                                         )
                                 }
-                            );
-                        const resultado =
-                            await resposta.json();
-                        if (!resposta.ok) {
-                            alert(
-                                resultado.message ||
-                                "Erro ao atualizar videoaula."
-                            );
-                            return;
-                        }
-                        alert(
-                            "Videoaula atualizada com sucesso!"
                         );
-                        fecharModal();
-                        await carregarVideoaulas();
-                    } catch (erro) {
-                        console.error(erro);
+                    const resultado =
+                        await resposta.json();
+                    if (!resposta.ok) {
                         alert(
-                            "Erro ao conectar com o servidor."
+                            resultado.message ||
+                            "Erro ao atualizar videoaula."
                         );
+                        return;
                     }
+                    alert(
+                        "Videoaula atualizada com sucesso!"
+                    );
+                    fecharModal();
+                    await carregarVideoaulas();
+                } catch (erro) {
+                    console.error(erro);
+                    alert(
+                        "Erro ao conectar com o servidor."
+                    );
                 }
-            );
+            }
+        );
         /* =================================================
            EXCLUIR
         ================================================= */
-        async function excluirVideo(id) {
-            const confirmar =
-                confirm(
-                    "Tem certeza que deseja excluir esta videoaula?"
+    async function excluirVideo(id) {
+        const confirmar =
+            confirm(
+                "Tem certeza que deseja excluir esta videoaula?"
+            );
+        if (!confirmar) {
+            return;
+        }
+        try {
+            const resposta =
+                await fetch(
+                    `${API}/videoaulas/${id}`,
+
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization":
+                                `Bearer ${localStorage.getItem("token")}`
+                        }
+                    }
                 );
-            if (!confirmar) {
+            const resultado =
+                await resposta.json();
+            if (!resposta.ok) {
+                alert(
+                    resultado.message ||
+                    "Erro ao excluir videoaula."
+                );
                 return;
             }
-            try {
-                const resposta =
-                    await fetch(
-                        `/videoaulas/${id}`,
-                        {
-                            method: "DELETE",
-                            headers: {
-                                "Authorization":
-                                    `Bearer ${localStorage.getItem("token")}`
-                            }
-                        }
-                    );
-                const resultado =
-                    await resposta.json();
-                if (!resposta.ok) {
-                    alert(
-                        resultado.message ||
-                        "Erro ao excluir videoaula."
-                    );
-                    return;
-                }
-                alert(
-                    "Videoaula excluída com sucesso!"
-                );
-                await carregarVideoaulas();
-            } catch (erro) {
-                console.error(erro);
-                alert(
-                    "Erro ao conectar com o servidor."
-                );
-            }
+            alert(
+                "Videoaula excluída com sucesso!"
+            );
+            await carregarVideoaulas();
+        } catch (erro) {
+            console.error(erro);
+            alert(
+                "Erro ao conectar com o servidor."
+            );
         }
+    }
         /* =================================================
            FILTROS
         ================================================= */
-        document
-            .getElementById(
-                "pesquisaVideo"
-            )
-            .addEventListener(
-                "input",
-                mostrarVideoaulas
-            );
-        document
-            .getElementById(
-                "filtroMateria"
-            )
-            .addEventListener(
-                "change",
-                mostrarVideoaulas
-            );
+    document
+        .getElementById(
+            "pesquisaVideo"
+        )
+        .addEventListener(
+            "input",
+            mostrarVideoaulas
+        );
+    document
+        .getElementById(
+            "filtroMateria"
+        )
+        .addEventListener(
+            "change",
+            mostrarVideoaulas
+        );
         /* =================================================
            FECHAR MODAL CLICANDO FORA
         ================================================= */
-        document
-            .getElementById(
-                "modalEditarVideo"
-            )
-            .addEventListener(
-                "click",
-                function (event) {
-                    if (
-                        event.target === this
-                    ) {
-                        fecharModal();
-                    }
-                }
-            );
-        /* =================================================
-           ESC PARA FECHAR
-        ================================================= */
-        document.addEventListener(
-            "keydown",
+    document
+        .getElementById(
+            "modalEditarVideo"
+        )
+        .addEventListener(
+            "click",
             function (event) {
                 if (
-                    event.key === "Escape"
+                    event.target === this
                 ) {
                     fecharModal();
                 }
             }
         );
         /* =================================================
+           ESC PARA FECHAR
+        ================================================= */
+    document.addEventListener(
+        "keydown",
+        function (event) {
+            if (
+                event.key === "Escape"
+            ) {
+                fecharModal();
+            }
+        }
+    );
+        /* =================================================
            INICIAR
         ================================================= */
-        carregarMaterias();
-        carregarVideoaulas();
-    </script>
-</body>
+    carregarMaterias();
+    carregarVideoaulas();
+</script>
 </html>
