@@ -1,51 +1,27 @@
 * {
   box-sizing: border-box;
 }
-/* ================================
-   VÍDEO HERO
-================================ */
 
-.video-hero {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    min-height: 600px;
-    overflow: hidden;
-    isolation: isolate;
-    background: #000;
+/* .video-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* tela cheia; pode trocar por altura fixa, ex: 80vh */
+  /* overflow: hidden;
 }
 
-/* Container do vídeo */
 .video-hero__media {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0;
-}
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover; /* preenche a área sem distorcer */
+/* }
 
-/* Vídeo do YouTube */
-.video-hero__media iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 177.78vh;
-    height: 100vh;
-    min-width: 100%;
-    min-height: 56.25vw;
-    transform: translate(-50%, -50%);
-    border: 0;
-    pointer-events: none;
-    display: block;
-}
-
-/* Camada escura */
 .video-hero__overlay {
-<<<<<<< Updated upstream
-    position: absolute;
-    inset: 0;
-=======
   position: relative;
   z-index: 2;
   height: 100%;
@@ -58,42 +34,7 @@
   background: rgba(0, 0, 0, 0.25); /* escurece um pouco o vídeo pra texto legível */
   /* padding: 0 20px;
 } */
- 
->>>>>>> Stashed changes
 
-    width: 100%;
-    height: 100%;
-
-    z-index: 1;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    padding: 20px;
-
-    text-align: center;
-    color: #fff;
-
-    background: rgba(0, 0, 0, 0.35);
-}
-
-/* Título */
-.video-hero__overlay h1 {
-    margin: 0;
-    font-size: clamp(2.5rem, 6vw, 5.5rem);
-    font-weight: 700;
-}
-
-/* Texto */
-.video-hero__overlay p {
-    max-width: 700px;
-    margin: 20px 0 0;
-
-    font-size: clamp(1rem, 2vw, 1.3rem);
-    line-height: 1.6;
-}
 /* home (index) */
 #body_index_cadastro {
   font-family: "Josefin Sans", sans-serif;
@@ -190,26 +131,23 @@ figure {
   margin: 0px;
 }
 #home {
-  position: relative;
-  z-index: 2;
-  width: 100%;
   text-align: center;
   font-size: 1.5rem;
   color: #f2e9e1;
-  margin: 0;
-  padding: 80px 50px;
+  margin-bottom: 28px;
+  margin: 50px;
   line-height: 1.6;
 }
 #ftcriadoras {
-  position: relative;
-  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 80px;
-  width: 100%;
-  margin: 60px 0;
+  gap: 50px;
+  border-radius: 10px;
   padding: 20px;
+  margin: 5px;
+  margin-left: 300px;
+  margin-right: 300px;
 }
 .lauane,
 .melissa {
@@ -796,6 +734,13 @@ button:hover {
   padding: 10px;
   text-align: center;
 }
+/* layout */
+#ftcriadoras {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin: 60px 0;
+}
 /* estado virado */
 .card-inner.virado {
   transform: rotateY(180deg);
@@ -808,31 +753,4 @@ button:hover {
     width: 100%;
   }
 }
-/* =================================
-   CORREÇÃO DO VÍDEO HERO
-================================= */
-.video-hero {
-    position: relative;
-    z-index: 1;
-    isolation: isolate;
-    overflow: hidden;
-}
-.video-hero__media {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-}
-.video-hero__overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-}
-/* Impede que as próximas seções fiquem atrás do vídeo */
-#home,
-#ftcriadoras,
-#feedback,
-#footer_index_cadastro {
-    position: relative;
-    z-index: 2;
-}
+
