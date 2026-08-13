@@ -1,14 +1,3 @@
-# Dependências
-node_modules/
+back/nodemodules/
 
-# Variáveis de ambiente
-.env
-.env.*
-!.env.example
-
-# Arquivos de desenvolvimento
-.vscode/
-
-# Logs
-*.log
-npm-debug.log*
+banco/.sql
