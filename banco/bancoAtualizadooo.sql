@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `contato` (
   PRIMARY KEY (`id_contato`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- Copiando dados para a tabela stardev.contato: ~18 rows (aproximadamente)
+-- Copiando dados para a tabela stardev.contato: ~19 rows (aproximadamente)
 DELETE FROM `contato`;
 INSERT INTO `contato` (`id_contato`, `nome`, `email`, `comentario`, `data_envio`, `status_feedback`) VALUES
 	(1, 'back', 'stardevaulas@gmail.com', 'shfghfg', '2026-05-05 13:24:30', 'Pendente'),
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `materias` (
   CONSTRAINT `id_aula` FOREIGN KEY (`id_aula`) REFERENCES `aulas` (`id_aula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- Copiando dados para a tabela stardev.materias: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela stardev.materias: ~11 rows (aproximadamente)
 DELETE FROM `materias`;
 INSERT INTO `materias` (`id_materias`, `nome_aulas`, `id_aula`, `link`, `descricao`) VALUES
 	(2, 'Intranet- testandpo', 2, 'https://youtu.be/YIvGf2IjaXI?si=RhQhuyE79FcUxocI', 'aaaaaaaaaaaaaaaaaaa'),

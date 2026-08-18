@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil</title>
+    <link rel="stylesheet" href="/front/style.css">
+    <link rel="stylesheet" href="/front/chatfront/css/chatbot.css">
+    <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+</head>
+<body class="body_index_cadastro">
+    <header class="header_index_cadastro">
+        <figure class="logo">
+            <a href="/front/index.html" target="_self" class="hrefs"><img src="/front/img/logo.svg" alt="LOGOTIPO StarDev" href="/front/index.html"></a>
+        </figure>
+        <nav>
+            <figure class="ftichome">
+                <a href="/front/aulas.html" target="_self" class="hrefs"><img src="/front/img/home.svg" alt="ICONE HOME.SVG"></a>
+            </figure>
+            <a href="/front/perfil.html" target="_self" class="hrefs">
+                <img src="/front/img/perfil-icon.svg" alt="ICONE PERFIL.SVG" class="icone-perfil-nav">
+            </a>
+        </nav>
+    </header>
+    <main>
+        <section id="section_perfil">
+            <div class="perfil-card">
+                <div class="perfil-foto-wrapper">
+                    <label for="perfil-foto-input" class="perfil-foto" id="perfil-foto">
+                        <img src="/front/img/perfil-icon.svg" alt="ICONE PERFIL.SVG" class="perfil-foto-icone">
+                        <img src="" alt="Foto de perfil" id="perfil-foto-img">
+                    </label>
+                    <label for="perfil-foto-input" class="perfil-foto-label">&#9998;</label>
+                    <input type="file" accept="image/*" id="perfil-foto-input" class="perfil-foto-input">
+                </div>
+                <button type="button" id="perfil-remover-foto">Remover foto</button>
+                <h2 class="perfil-nome-topo" id="perfil-nome-topo">Nome do Aluno</h2>
+                <p class="perfil-curso-topo" id="perfil-curso-topo">Curso atual</p>
+                <form id="formPerfil">
+                    <div class="campo">
+                        <label for="input_perfil_nome">Nome completo</label>
+                        <input type="text" id="input_perfil_nome" name="nome" placeholder="Digite seu nome completo">
+                    </div>
+                    <div class="perfil-linha-dupla">
+                        <div class="campo">
+                            <label for="input_perfil_email">E-mail</label>
+                            <input type="email" id="input_perfil_email" name="email" placeholder="Digite seu e-mail">
+                        </div>
+                        <div class="campo">
+                            <label for="input_perfil_telefone">Telefone</label>
+                            <input type="text" id="input_perfil_telefone" name="telefone" placeholder="Digite seu telefone">
+                        </div>
+                    </div>
+                    <div class="campo">
+                        <label for="input_perfil_curso">Curso</label>
+                        <input type="text" id="input_perfil_curso" name="curso" placeholder="Digite o curso que está fazendo">
+                    </div>
+                    <div class="campo">
+                        <label for="input_perfil_bio">Sobre mim</label>
+                        <textarea id="input_perfil_bio" name="bio" placeholder="Conte um pouco sobre você"></textarea>
+                    </div>
+                    <button type="submit">Salvar alterações</button>
+                    <p id="perfil-status"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer id="footer_index_cadastro">
+        <p><a href="/front/cadastro.html" target="_self" class="hrefs">Cadastra-se</a></p>
+        <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
+    </footer>
+    <!-- CHATBOT -->
+    <div id="chatbot_container"></div>
+    <script>
+        fetch("/front/chatfront/components/chatbot.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("chatbot_container").innerHTML = data;
+            const script = document.createElement("script");
+            script.src = "/front/chatfront/js/chatbot.js";
+            document.body.appendChild(script);
+        });
+    </script>
+    <script>
+        const fotoInput = document.getElementById("perfil-foto-input");
+        const fotoLabel = document.getElementById("perfil-foto");
+        const fotoImg = document.getElementById("perfil-foto-img");
+        const removerFotoBtn = document.getElementById("perfil-remover-foto");
+        fotoInput.addEventListener("change", () => {
+            const file = fotoInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    fotoImg.src = e.target.result;
+                    fotoImg.classList.add("ativo");
+                    fotoLabel.classList.add("tem-foto");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        removerFotoBtn.addEventListener("click", () => {
+            fotoImg.src = "";
+            fotoImg.classList.remove("ativo");
+            fotoLabel.classList.remove("tem-foto");
+            fotoInput.value = "";
+        });
+        document.getElementById("formPerfil").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const status = document.getElementById("perfil-status");
+            document.getElementById("perfil-nome-topo").textContent =
+                document.getElementById("input_perfil_nome").value || "Nome do Aluno";
+            document.getElementById("perfil-curso-topo").textContent =
+                document.getElementById("input_perfil_curso").value || "Curso atual";
+            status.textContent = "Alterações salvas com sucesso!";
+            status.classList.add("mostrar");
+            setTimeout(() => status.classList.remove("mostrar"), 3000);
+        });
+    </script>
+</body>
+</html>
