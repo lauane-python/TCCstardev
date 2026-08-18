@@ -169,6 +169,7 @@ app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
         // AQUI SIM!
         if (req.usuario.nivel !== "A") {
+            
             return res.status(403).json({ resposta: "Acesso negado" });
         }
         const { materia, duracao, qtd_aulas } = req.body;

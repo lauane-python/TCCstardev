@@ -39,8 +39,111 @@
             </section>
         </section>
     </main>
-    <script>
-        const carrossel = document.querySelector('.drag');
+</body>
+<script>
+// ===============================
+    // AULAS CADASTRADAS NA INTRANET
+    // ===============================
+
+    const API = "http://10.111.9.29:3000/videoaulas";
+
+    // ID DA MATÉRIA BACK-END
+    const ID_MATERIA = 11;
+
+    const lista = document.getElementById("listaAulas");
+
+    async function carregarAulas() {
+
+        try {
+
+            const resposta = await fetch(API);
+
+            if (!resposta.ok) {
+                throw new Error("Erro ao buscar as aulas");
+            }
+
+            const aulas = await resposta.json();
+
+            console.log("Aulas recebidas:", aulas);
+
+            lista.innerHTML = "";
+
+            // Pega somente as aulas do Back-End
+            const aulasMateria = aulas.filter(
+                aula => Number(aula.id_aula) === ID_MATERIA
+            );
+
+            console.log("Aulas de Back-End:", aulasMateria);
+
+            // Se não tiver aula
+            if (aulasMateria.length === 0) {
+
+                lista.innerHTML = `
+                    <p class="nenhuma-aula">
+                        Nenhuma aula cadastrada para esta matéria.
+                    </p>
+                `;
+
+                return;
+            }
+
+            // Mostra cada aula
+            aulasMateria.forEach(aula => {
+
+            console.log("AULA:", aula);
+            console.log("LINK ANTES:", aula.link);
+
+            let link = aula.link;
+
+            if (link.includes("watch?v=")) {
+
+                const codigo = link.split("watch?v=")[1].split("&")[0];
+
+                link = `https://www.youtube.com/embed/${codigo}`;
+
+            } else if (link.includes("youtu.be/")) {
+
+                const codigo = link.split("youtu.be/")[1].split("?")[0];
+
+                link = `https://www.youtube.com/embed/${codigo}`;
+            }
+
+            console.log("LINK DEPOIS:", link);
+
+            lista.innerHTML += `
+                <article class="card-video">
+
+                    <h2>${aula.nome_aulas}</h2>
+
+                    <p>${aula.descricao}</p>
+
+                    <iframe
+                        src="${link}"
+                        title="${aula.nome_aulas}"
+                        width="100%"
+                        height="450"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+
+                </article>
+            `;
+        });
+
+        } catch (erro) {
+
+            console.error("ERRO AO CARREGAR AULAS:", erro);
+
+            lista.innerHTML = `
+                <p class="erro-aulas">
+                    Não foi possível carregar as aulas.
+                </p>
+            `;
+        }
+    }
+    carregarAulas();
+    const carrossel = document.querySelector('.drag');
         let isDown = false;
         let startX;
         let scrollLeft;
@@ -64,127 +167,6 @@
           carrossel.scrollLeft = scrollLeft - walk;
         });
         
-         // ===============================
-        // AULAS CADASTRADAS NA INTRANET
-        // ===============================
 
-        const API = "http://10.111.9.29:3000/videoaulas";
-
-        // ID DA MATÉRIA BACK-END
-        const ID_MATERIA = 11;
-
-        const lista = document.getElementById("listaAulas");
-
-        async function carregarAulas() {
-
-            try {
-
-                const resposta = await fetch(API);
-
-                if (!resposta.ok) {
-                    throw new Error("Erro ao buscar as aulas");
-                }
-
-                const aulas = await resposta.json();
-
-                console.log("Aulas recebidas:", aulas);
-
-                lista.innerHTML = "";
-
-                // Pega somente as aulas do Back-End
-                const aulasMateria = aulas.filter(
-                    aula => Number(aula.id_aula) === ID_MATERIA
-                );
-
-                console.log("Aulas de Back-End:", aulasMateria);
-
-                // Se não tiver aula
-                if (aulasMateria.length === 0) {
-
-                    lista.innerHTML = `
-                        <p class="nenhuma-aula">
-                            Nenhuma aula cadastrada para esta matéria.
-                        </p>
-                    `;
-
-                    return;
-                }
-
-                // Mostra cada aula
-                aulasMateria.forEach(aula => {
-
-                    let link = aula.link;
-
-                    // Link do YouTube:
-                    // https://www.youtube.com/watch?v=ABC123
-                    if (link.includes("watch?v=")) {
-
-                        const codigo = link.split("watch?v=")[1].split("&")[0];
-
-                        link = `https://www.youtube.com/embed/${codigo}`;
-                    }
-
-                    // Link do YouTube:
-                    // https://youtu.be/ABC123
-                    else if (link.includes("youtu.be/")) {
-
-                        const codigo = link.split("youtu.be/")[1].split("?")[0];
-
-                        link = `https://www.youtube.com/embed/${codigo}`;
-                    }
-
-                    lista.innerHTML += `
-                        <article class="card-video">
-
-                            <h2>${aula.nome_aulas}</h2>
-
-                            <p>${aula.descricao}</p>
-
-                            <iframe
-                                src="${link}"
-                                title="${aula.nome_aulas}"
-                                width="100%"
-                                height="450"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen>
-                            </iframe>
-
-                        </article>
-                    `;
-
-                });
-
-            } catch (erro) {
-
-                console.error("ERRO AO CARREGAR AULAS:", erro);
-
-                lista.innerHTML = `
-                    <p class="erro-aulas">
-                        Não foi possível carregar as aulas.
-                    </p>
-                `;
-            }
-        }
-        carregarAulas();
-    </script>
-    <!-- CHATBOT -->
-    <div id="chatbot_container"></div>
-    <script>
-    fetch("/front/chatfront/components/chatbot.html")
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById(
-            "chatbot_container"
-        ).innerHTML = data;
-        const script =
-            document.createElement("script");
-        script.src =
-            "/front/chatfront/js/chatbot.js";
-        document.body.appendChild(script);
-
-    });
-    </script>
-    </script>
-</body>
+</script>
 </html>
