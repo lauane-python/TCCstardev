@@ -39,6 +39,23 @@
             </section>
         </section>
     </main>
+    <!-- CHATBOT -->
+    <div id="chatbot_container"></div>
+    <script>
+    fetch("/front/chatfront/components/chatbot.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById(
+            "chatbot_container"
+        ).innerHTML = data;
+        const script =
+            document.createElement("script");
+        script.src =
+            "/front/chatfront/js/chatbot.js";
+        document.body.appendChild(script);
+
+    });
+    </script>
 </body>
 <script>
 // ===============================
@@ -166,7 +183,5 @@
           const walk = (x - startX) * 2; // velocidade
           carrossel.scrollLeft = scrollLeft - walk;
         });
-        
-
 </script>
 </html>
