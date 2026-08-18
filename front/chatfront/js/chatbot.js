@@ -58,7 +58,7 @@ async function enviarMensagem() {
     try {
         const response =
             await fetch(
-                "http://10.111.9.16:3000/chatback/chat",
+                "http://10.111.9.15:3000/chatback/chat",
                 {
                     method: "POST",
                     headers: {
