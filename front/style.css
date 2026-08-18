@@ -140,10 +140,20 @@ nav a {
   font-size: 15px;
   letter-spacing: 0.6px;
   transition: color .5s, transform .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 nav a:hover {
   color: #db9a8f;
   transform: translateY(-1px);
+}
+.icone-perfil-nav {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: inline-block;
+  flex-shrink: 0;
 }
 .banner {
   width: 100%;
@@ -1291,7 +1301,7 @@ body {
   transform: scale(1.04);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
-.perfil-foto img {
+.perfil-foto img#perfil-foto-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1301,8 +1311,11 @@ body {
   display: block;
 }
 .perfil-foto-icone {
-  font-size: 60px;
-  color: #804256;
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
 }
 .perfil-foto.tem-foto .perfil-foto-icone {
   display: none;
