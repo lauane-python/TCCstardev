@@ -1,57 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fundamentos da Programação</title>
+    <title>Banco de Dados</title>
     <link rel="stylesheet" href="/front/style.css">
     <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
 </head>
 <body class="body_index_cadastro">
     <header class="header_index_cadastro">
         <figure class="logo">
-            <a href="/front/index.html" target="_self" class="hrefs"><img src="/front/img/logo.svg" alt="LOGOTIPO StarDev" href="/front/index.html"></a>
+            <a href="/front/index.html" target="_self" class="hrefs">
+                <img src="/front/img/logo.svg" alt="LOGOTIPO StarDev">
+            </a>
         </figure>
         <nav>
             <figure class="ftichome">
-                <a href="/front/aulas.html" target="_self" class="hrefs"><img src="/front/img/home.svg" alt="ICONE HOME.SVG"></a>
+                <a href="/front/aulas.html" target="_self" class="hrefs">
+                    <img src="/front/img/home.svg" alt="ICONE HOME">
+                </a>
             </figure>
         </nav>
     </header>
     <main>
         <section class="carrossel-container">
             <section class="carrossel drag">
-                <p class="card-aula roxo"><a href="/front/aulas/afundamentos.html" target="_blank" class="hrefs_au">Fundamentos da Programação</a></p>
-                <p class="card-aula verde"><a href="/front/aulas/alogica.html" target="_blank" class="hrefs_au">Lógica de Programação</a></p>
-                <p class="card-aula marrom"><a href="/front/aulas/aweb.html" target="_blank" class="hrefs_au">Desenvolvimento Web</a></p>
-                <p class="card-aula amarelo"><a href="/front/aulas/afront.html" target="_blank" class="hrefs_au">Front-end</a></p>
-                <p class="card-aula roxo"><a href="/front/aulas/aback.html" target="_blank" class="hrefs_au">Back-end</a></p>
-                <p class="card-aula verde"><a href="/front/aulas/adb.html" target="_blank" class="hrefs_au">Banco de Dados</a></p>
-                <p class="card-aula marrom"><a href="/front/aulas/aprojetos.html" target="_blank" class="hrefs_au">Banco de Dados</a></p>
-                <p class="card-aula amarelo"><a href="/front/aulas/aseguranca.html" target="_blank"class="hrefs_au">Segurança da Informação</a></p>
-                <p class="card-aula roxo"><a href="/front/aulas/alimpo.html" target="_blank"class="hrefs_au">Código Limpo</a></p>
-                <p class="card-aula verde"><a href="/front/aulas/amobile.html" target="_blank" class="hrefs_au">Desenvolvimento Mobile</a></p>
-                <p class="card-aula marrom"><a href="/front/aulas/arede.html" target="_blank" class="hrefs_au">Redes e IOT</a></p>
-                <p class="card-aula amarelo"><a href="/front/aulas/alinguagens.html" target="_blank" class="hrefs_au">Linguagem de Programação</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html?materia=2" target="_blank" class="hrefs_au">Fundamentos da Programação</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html?materia=3" target="_blank" class="hrefs_au">Lógica de Programação</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html?materia=4" target="_blank" class="hrefs_au">Desenvolvimento Web</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html?materia=5" target="_blank" class="hrefs_au">Front-end</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html?materia=1" target="_blank" class="hrefs_au">Back-End</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html?materia=6" target="_blank" class="hrefs_au">Banco de Dados</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html?materia=7" target="_blank" class="hrefs_au">Projetos</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html?materia=8" target="_blank" class="hrefs_au">Segurança da Informação</a></p>
+                <p class="card-aula roxo"><a href="/front/aulas1/esqueleto.html?materia=9" target="_blank" class="hrefs_au">Código Limpo</a></p>
+                <p class="card-aula verde"><a href="/front/aulas1/esqueleto.html?materia=10" target="_blank" class="hrefs_au">Desenvolvimento Mobile</a></p>
+                <p class="card-aula marrom"><a href="/front/aulas1/esqueleto.html?materia=11" target="_blank" class="hrefs_au">Redes e IOT</a></p>
+                <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html?materia=12" target="_blank" class="hrefs_au">Linguagem de Programação</a></p>
             </section>
-
-            <section id="listaAulas">
-                <p> Carregando aulas...</p>
-            </section>
-
         </section>
-    </main>
 
-    
+        <section class="listarAulas" id="listaAulas">
+            <p>Carregando aula...</p>
+        </section>
+
+    </main>
     <script>
-        //P=CARROSEL
+        // CARROSSEL
         const carrossel = document.querySelector('.drag');
         let isDown = false;
         let startX;
         let scrollLeft;
         carrossel.addEventListener('mousedown', (e) => {
             isDown = true;
-            carrossel.classList.add('active');
             startX = e.pageX - carrossel.offsetLeft;
             scrollLeft = carrossel.scrollLeft;
         });
@@ -65,18 +66,33 @@
             if (!isDown) return;
             e.preventDefault();
             const x = e.pageX - carrossel.offsetLeft;
-            const walk = (x - startX) * 2; // velocidade
+            const walk = (x - startX) * 2;
             carrossel.scrollLeft = scrollLeft - walk;
         });
-        // PEGANDO AS AULAS CADASTRADAS NA AREA Administrativa
+
+        // ===============================
+        // AULAS CADASTRADAS NA INTRANET
+        // ===============================
+
         const API = "http://10.111.9.17:3000/videoaulas";
 
-        // ID DA MATÉRIA BACK-END
-        const ID_MATERIA = 2;
+        // ID DA MATÉRIA VEM DA URL: esqueleto.html?materia=5
+        const params = new URLSearchParams(window.location.search);
+        const ID_MATERIA = Number(params.get("materia"));
 
-        const lista = document.querySelector(".listaAulas");
+        const lista = document.getElementById("listaAulas");
 
         async function carregarAulas() {
+
+            // Se a URL não trouxer o parâmetro "materia"
+            if (!ID_MATERIA) {
+                lista.innerHTML = `
+                    <p class="erro-aulas">
+                        Nenhuma matéria informada na URL.
+                    </p>
+                `;
+                return;
+            }
 
             try {
 
@@ -92,12 +108,12 @@
 
                 lista.innerHTML = "";
 
-                // Pega somente as aulas do Back-End
+                // Pega somente as aulas da matéria escolhida na URL
                 const aulasMateria = aulas.filter(
                     aula => Number(aula.id_aula) === ID_MATERIA
                 );
 
-                console.log("Aulas de Back-End:", aulasMateria);
+                console.log("Aulas da matéria " + ID_MATERIA + ":", aulasMateria);
 
                 // Se não tiver aula
                 if (aulasMateria.length === 0) {
@@ -167,6 +183,7 @@
                 `;
             }
         }
+
         carregarAulas();
     </script>
     <!-- CHATBOT -->
