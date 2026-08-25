@@ -39,11 +39,9 @@
                 <p class="card-aula amarelo"><a href="/front/aulas1/esqueleto.html?materia=12" target="_blank" class="hrefs_au">Linguagem de Programação</a></p>
             </section>
         </section>
-
         <section class="listarAulas" id="listaAulas">
             <p>Carregando aula...</p>
         </section>
-
     </main>
     <script>
         // CARROSSEL
@@ -69,21 +67,15 @@
             const walk = (x - startX) * 2;
             carrossel.scrollLeft = scrollLeft - walk;
         });
-
         // ===============================
         // AULAS CADASTRADAS NA INTRANET
         // ===============================
-
-        const API = "http://10.111.9.17:3000/videoaulas";
-
+        const API = "http://10.111.9.56:3000/videoaulas";
         // ID DA MATÉRIA VEM DA URL: esqueleto.html?materia=5
         const params = new URLSearchParams(window.location.search);
         const ID_MATERIA = Number(params.get("materia"));
-
         const lista = document.getElementById("listaAulas");
-
         async function carregarAulas() {
-
             // Se a URL não trouxer o parâmetro "materia"
             if (!ID_MATERIA) {
                 lista.innerHTML = `
@@ -93,70 +85,47 @@
                 `;
                 return;
             }
-
             try {
-
                 const resposta = await fetch(API);
-
                 if (!resposta.ok) {
                     throw new Error("Erro ao buscar as aulas");
                 }
-
                 const aulas = await resposta.json();
-
                 console.log("Aulas recebidas:", aulas);
-
                 lista.innerHTML = "";
-
                 // Pega somente as aulas da matéria escolhida na URL
                 const aulasMateria = aulas.filter(
                     aula => Number(aula.id_aula) === ID_MATERIA
                 );
-
                 console.log("Aulas da matéria " + ID_MATERIA + ":", aulasMateria);
-
                 // Se não tiver aula
                 if (aulasMateria.length === 0) {
-
                     lista.innerHTML = `
                         <p class="nenhuma-aula">
                             Nenhuma aula cadastrada para esta matéria.
                         </p>
                     `;
-
                     return;
                 }
-
                 // Mostra cada aula
                 aulasMateria.forEach(aula => {
-
                     let link = aula.link;
-
                     // Link do YouTube:
                     // https://www.youtube.com/watch?v=ABC123
                     if (link.includes("watch?v=")) {
-
                         const codigo = link.split("watch?v=")[1].split("&")[0];
-
                         link = `https://www.youtube.com/embed/${codigo}`;
                     }
-
                     // Link do YouTube:
                     // https://youtu.be/ABC123
                     else if (link.includes("youtu.be/")) {
-
                         const codigo = link.split("youtu.be/")[1].split("?")[0];
-
                         link = `https://www.youtube.com/embed/${codigo}`;
                     }
-
                     lista.innerHTML += `
                         <article class="card-video">
-
                             <h2>${aula.nome_aulas}</h2>
-
                             <p>${aula.descricao}</p>
-
                             <iframe
                                 src="${link}"
                                 title="${aula.nome_aulas}"
@@ -166,16 +135,11 @@
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowfullscreen>
                             </iframe>
-
                         </article>
                     `;
-
                 });
-
             } catch (erro) {
-
                 console.error("ERRO AO CARREGAR AULAS:", erro);
-
                 lista.innerHTML = `
                     <p class="erro-aulas">
                         Não foi possível carregar as aulas.
@@ -183,7 +147,6 @@
                 `;
             }
         }
-
         carregarAulas();
     </script>
     <!-- CHATBOT -->
