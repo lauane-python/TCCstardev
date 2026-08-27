@@ -63,7 +63,7 @@
 
         const senhaRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/;
-
+        const nomeRegex = /^[A-Za-zÀ-ÿ\s]+$/;
         const telefoneRegex = /^\d{10,11}$/;
 
        
@@ -76,6 +76,11 @@
 
         if (nome === "") {
             alert("Digite seu nome.");
+            return;
+        }
+        
+        if (!nomeRegex.test(nome)) {
+            alert("Digite um nome coretamente");
             return;
         }
 
@@ -93,6 +98,9 @@
             alert("A senha deve conter no mínimo 8 caracteres, letra maiúscula, minúscula, número e caractere especial.");
             return;
         }
+       
+
+    
 
         try {
 

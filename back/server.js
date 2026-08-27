@@ -87,7 +87,10 @@ app.post("/cadastro", async (req, res) => {
         if (email.length < 6) {
             return res.json({ resposta: "Preencha o email corretamente" });
         }
-        if (nome.length < 6) {
+        if (nome.length <6 ){
+            return res.json ({ resposta: "Preencha corretamente o seu nome completo"})
+        }
+        if (telefone.length < 6) {
             return res.json({ resposta: "Preencha o nome completo" });
         }
         const telefoneRegex = /^\d{10,11}$/;
