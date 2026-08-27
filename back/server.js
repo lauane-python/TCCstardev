@@ -9,6 +9,15 @@ const jwt = require("jsonwebtoken");
 
 const SECRET = "segredo_super_secreto";
 
+const multer = require("multer");
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, "uploads/fotos"),
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `user_${req.usuario.id}${ext}`);
+    }
+});
+
 app.use(express.json());
 app.use(cors());
 
@@ -167,6 +176,36 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ erro: "Erro no servidor" });
     }
 });
+app.get("/usuario", verificarToken, async (req, res) => {
+    try {
+        const userId = req.usuario.id;
+        const sql = `SELECT nome, email, telefone, bio, foto FROM cadastro WHERE id_cadastro=?`;
+        const [rows] = await conexao.query(sql, [userId]);
+        if (rows.length === 0) {
+            return res.status(404).json({ resposta: "Usuário não encontrado" });
+        }
+        return res.json(rows[0]);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ erro: "Erro no servidor" });
+    }
+});
+const upload = multer({ storage });
+
+app.use("/uploads", express.static("uploads")); // pra servir as imagens
+
+app.post("/usuario/foto", verificarToken, upload.single("foto"), async (req, res) => {
+    try {
+        const userId = req.usuario.id;
+        const caminho = `/uploads/fotos/${req.file.filename}`;
+        const sql = `UPDATE cadastro SET foto=? WHERE id_cadastro=?`;
+        await conexao.query(sql, [caminho, userId]);
+        return res.json({ resposta: "Foto atualizada com sucesso", foto: caminho });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ erro: "Erro ao salvar foto" });
+    }
+});
 /*CADASTRO DE AULAS (PROTEGIDO)*/
 app.post("/CadastroAulas", verificarToken, async (req, res) => {
     try {
@@ -248,16 +287,17 @@ app.put("/recuperarSenha", async (req, res) => {
     }
 });
 /*ATUALIZAR USUÁRIO*/
+
 app.put("/usuario", verificarToken, async (req, res) => {
     try {
-        const { nome, email, telefone } = req.body;
+        const { nome, email, telefone, bio } = req.body;
         const userId = req.usuario.id;
         const sql = `
             UPDATE cadastro
-            SET nome=?, email=?, telefone=?
+            SET nome=?, email=?, telefone=?, bio=?
             WHERE id_cadastro=?
         `;
-        const [result] = await conexao.query(sql, [nome, email, telefone, userId]);
+        const [result] = await conexao.query(sql, [nome, email, telefone, bio, userId]);
         if (result.affectedRows === 1) {
             return res.json({ resposta: "Usuário atualizado com sucesso" });
         }
@@ -577,5 +617,5 @@ app.use(
     chatbotRoutes
 );
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://10.111.9.56:${PORT}`);
+    console.log(`Servidor rodando em http://10.111.9.22:${PORT}`);
 });

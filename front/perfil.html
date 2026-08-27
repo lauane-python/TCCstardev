@@ -52,10 +52,6 @@
                         </div>
                     </div>
                     <div class="campo">
-                        <label for="input_perfil_curso">Curso</label>
-                        <input type="text" id="input_perfil_curso" name="curso" placeholder="Digite o curso que está fazendo">
-                    </div>
-                    <div class="campo">
                         <label for="input_perfil_bio">Sobre mim</label>
                         <textarea id="input_perfil_bio" name="bio" placeholder="Conte um pouco sobre você"></textarea>
                     </div>
@@ -72,49 +68,142 @@
     <!-- CHATBOT -->
     <div id="chatbot_container"></div>
     <script>
-        fetch("/front/chatfront/components/chatbot.html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("chatbot_container").innerHTML = data;
-            const script = document.createElement("script");
-            script.src = "/front/chatfront/js/chatbot.js";
-            document.body.appendChild(script);
-        });
-    </script>
-    <script>
         const fotoInput = document.getElementById("perfil-foto-input");
         const fotoLabel = document.getElementById("perfil-foto");
         const fotoImg = document.getElementById("perfil-foto-img");
         const removerFotoBtn = document.getElementById("perfil-remover-foto");
-        fotoInput.addEventListener("change", () => {
-            const file = fotoInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    fotoImg.src = e.target.result;
+        const status = document.getElementById("perfil-status");
+
+        const token = localStorage.getItem("token");
+
+        function mostrarStatus(mensagem) {
+            status.textContent = mensagem;
+            status.classList.add("mostrar");
+            setTimeout(() => status.classList.remove("mostrar"), 3000);
+        }
+
+        // Carrega os dados do usuário ao abrir a página
+        window.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await fetch("/usuario", {
+                    method: "GET",
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                const dados = await res.json();
+
+                document.getElementById("input_perfil_nome").value = dados.nome || "";
+                document.getElementById("input_perfil_email").value = dados.email || "";
+                document.getElementById("input_perfil_telefone").value = dados.telefone || "";
+                document.getElementById("input_perfil_bio").value = dados.bio || "";
+
+                document.getElementById("perfil-nome-topo").textContent = dados.nome || "Nome do Aluno";
+
+                if (dados.foto) {
+                    fotoImg.src = dados.foto;
                     fotoImg.classList.add("ativo");
                     fotoLabel.classList.add("tem-foto");
-                };
-                reader.readAsDataURL(file);
+                }
+            } catch (err) {
+                console.error("Erro ao carregar perfil:", err);
             }
         });
-        removerFotoBtn.addEventListener("click", () => {
+
+        // Upload de foto (envia direto pro servidor ao selecionar)
+        fotoInput.addEventListener("change", async () => {
+            const file = fotoInput.files[0];
+            if (!file) return;
+
+            // preview local imediato
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                fotoImg.src = e.target.result;
+                fotoImg.classList.add("ativo");
+                fotoLabel.classList.add("tem-foto");
+            };
+            reader.readAsDataURL(file);
+
+            // envia pro servidor
+            const formData = new FormData();
+            formData.append("foto", file);
+
+            try {
+                const res = await fetch("/usuario/foto", {
+                    method: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    mostrarStatus("Foto atualizada com sucesso!");
+                } else {
+                    mostrarStatus(data.resposta || "Erro ao enviar foto");
+                }
+            } catch (err) {
+                console.error("Erro ao enviar foto:", err);
+                mostrarStatus("Erro de conexão ao enviar foto");
+            }
+        });
+
+        // Remover foto (avisa o servidor também)
+        removerFotoBtn.addEventListener("click", async () => {
             fotoImg.src = "";
             fotoImg.classList.remove("ativo");
             fotoLabel.classList.remove("tem-foto");
             fotoInput.value = "";
+
+            try {
+                const res = await fetch("/usuario/foto", {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    mostrarStatus("Foto removida com sucesso!");
+                } else {
+                    mostrarStatus(data.resposta || "Erro ao remover foto");
+                }
+            } catch (err) {
+                console.error("Erro ao remover foto:", err);
+                mostrarStatus("Erro de conexão ao remover foto");
+            }
         });
-        document.getElementById("formPerfil").addEventListener("submit", (e) => {
+
+        // Salvar demais dados do perfil
+        document.getElementById("formPerfil").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const status = document.getElementById("perfil-status");
-            document.getElementById("perfil-nome-topo").textContent =
-                document.getElementById("input_perfil_nome").value || "Nome do Aluno";
-            document.getElementById("perfil-curso-topo").textContent =
-                document.getElementById("input_perfil_curso").value || "Curso atual";
-            status.textContent = "Alterações salvas com sucesso!";
-            status.classList.add("mostrar");
-            setTimeout(() => status.classList.remove("mostrar"), 3000);
+
+            const payload = {
+                nome: document.getElementById("input_perfil_nome").value,
+                email: document.getElementById("input_perfil_email").value,
+                telefone: document.getElementById("input_perfil_telefone").value,
+                bio: document.getElementById("input_perfil_bio").value
+            };
+
+            try {
+                const res = await fetch("/usuario", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.resposta === "Usuário atualizado com sucesso") {
+                    document.getElementById("perfil-nome-topo").textContent = payload.nome || "Nome do Aluno";
+                    mostrarStatus("Alterações salvas com sucesso!");
+                } else {
+                    mostrarStatus(data.resposta || "Erro ao salvar alterações");
+                }
+            } catch (err) {
+                console.error(err);
+                mostrarStatus("Erro de conexão com o servidor");
+            }
         });
-    </script>
+</script>
 </body>
 </html>
