@@ -79,7 +79,8 @@ app.post("/cadastro", async (req, res) => {
             nome = "",
             email = "",
             senha = "",
-            telefone = ""
+            telefone = "",
+            
         } = req.body;
         const senhaTrim = senha.trim().replace("ㅤ", "");
         if (senhaTrim === "") {

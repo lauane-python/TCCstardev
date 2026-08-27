@@ -76,6 +76,8 @@
 
         const token = localStorage.getItem("token");
 
+        const API_URL = "http://10.111.9.22:3000";,
+
         function mostrarStatus(mensagem) {
             status.textContent = mensagem;
             status.classList.add("mostrar");
@@ -85,7 +87,7 @@
         // Carrega os dados do usuário ao abrir a página
         window.addEventListener("DOMContentLoaded", async () => {
             try {
-                const res = await fetch("/usuario", {
+                const res = await fetch("http://10.111.9.22:3000/usuario", {
                     method: "GET",
                     headers: { "Authorization": "Bearer " + token }
                 });
@@ -103,8 +105,8 @@
                     fotoImg.classList.add("ativo");
                     fotoLabel.classList.add("tem-foto");
                 }
-            } catch (err) {
-                console.error("Erro ao carregar perfil:", err);
+            } catch (error) {
+                console.error("Erro ao carregar perfil:", error);
             }
         });
 
@@ -153,9 +155,14 @@
             fotoInput.value = "";
 
             try {
-                const res = await fetch("/usuario/foto", {
-                    method: "DELETE",
-                    headers: { "Authorization": "Bearer " + token }
+                // CORRIGIR salvar perfil:
+                const res = await fetch(`${API_URL}/usuario`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify(payload)
                 });
                 const data = await res.json();
 
