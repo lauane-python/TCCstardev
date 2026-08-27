@@ -40,12 +40,26 @@
                     <br>
                     <label for="telefone" type="tel" id="label_telefone">Telefone</label>
                     <br>
-                    <input type="text" id="input_telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15">
+                    <input type="tel" id="input_telefone" name="telefone" placeholder="+55 (00) 00000-0000" maxlength="19" inputmode="numeric">
                     <br>
                     <label for="senha" id="label_senha">Senha</label>
                     <br>
-                    <input type="password" id="input_senha" name="senha" autocomplete="new-password"
-                        placeholder="Digite sua senha">
+                    <div id="wrapper_senha" class="wrapper-senha">
+                        <input type="password" id="input_senha" name="senha" autocomplete="new-password"
+                            placeholder="Digite sua senha">
+                        <button type="button" id="btn_toggle_senha" class="btn-toggle-senha" aria-label="Mostrar senha" tabindex="-1">
+                            <svg id="icon_olho_aberto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="icon_olho_fechado" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.9 18.9 0 0 1 5.06-5.94"></path>
+                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                                <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
                     <br>
                     <button type="submit" class="button" id="btn_salvar_cadastro">Cadastrar</button>
                     <br>
@@ -66,12 +80,76 @@
         const nomeRegex = /^[A-Za-zÀ-ÿ\s]+$/;
         const telefoneRegex = /^\d{10,11}$/;
 
-       
+        // --- Máscara automática do telefone: +55 (DD) DDDDD-DDDD ---
+        const inputTelefone = document.getElementById("input_telefone");
+
+        function mascaraTelefone(digitos) {
+            digitos = digitos.slice(0, 11); // DDD + até 9 dígitos
+            const ddd = digitos.slice(0, 2);
+            const resto = digitos.slice(2);
+
+            let parte1 = resto;
+            let parte2 = "";
+            if (resto.length > 4) {
+                parte1 = resto.slice(0, resto.length - 4);
+                parte2 = resto.slice(resto.length - 4);
+            }
+
+            let resultado = "+55";
+            if (ddd.length > 0) {
+                resultado += " (" + ddd + (ddd.length === 2 ? ")" : "");
+            }
+            if (parte1.length > 0) {
+                resultado += (ddd.length === 2 ? " " : "") + parte1;
+            }
+            if (parte2.length > 0) {
+                resultado += "-" + parte2;
+            }
+            return resultado;
+        }
+
+        inputTelefone.addEventListener("input", () => {
+            let digitos = inputTelefone.value.replace(/\D/g, "");
+            // remove o "55" do prefixo fixo que já aparece no campo
+            if (digitos.startsWith("55")) {
+                digitos = digitos.slice(2);
+            }
+            inputTelefone.value = mascaraTelefone(digitos);
+        });
+
+        inputTelefone.addEventListener("focus", () => {
+            if (inputTelefone.value.trim() === "") {
+                inputTelefone.value = "+55 (";
+            }
+        });
+
+        inputTelefone.addEventListener("blur", () => {
+            const digitos = inputTelefone.value.replace(/\D/g, "").replace(/^55/, "");
+            if (digitos.length === 0) {
+                inputTelefone.value = "";
+            }
+        });
+
+        // --- Mostrar/ocultar senha ---
+        const inputSenha = document.getElementById("input_senha");
+        const btnToggleSenha = document.getElementById("btn_toggle_senha");
+        const iconOlhoAberto = document.getElementById("icon_olho_aberto");
+        const iconOlhoFechado = document.getElementById("icon_olho_fechado");
+
+        btnToggleSenha.addEventListener("click", () => {
+            const mostrando = inputSenha.type === "text";
+            inputSenha.type = mostrando ? "password" : "text";
+            iconOlhoAberto.style.display = mostrando ? "block" : "none";
+            iconOlhoFechado.style.display = mostrando ? "none" : "block";
+            btnToggleSenha.setAttribute("aria-label", mostrando ? "Mostrar senha" : "Ocultar senha");
+        });
+
         document.getElementById("btn_salvar_cadastro").addEventListener("click", async () => {
 
         const nome = document.getElementById("input_nome").value.trim();
         const email = document.getElementById("input_email").value.trim();
-        const telefone = document.getElementById("input_telefone").value.replace(/\D/g, "");
+        // envia só o número nacional (DDD + número), sem o "55" do prefixo do país
+        const telefone = document.getElementById("input_telefone").value.replace(/\D/g, "").replace(/^55/, "");
         const senha = document.getElementById("input_senha").value;
 
         if (nome === "") {

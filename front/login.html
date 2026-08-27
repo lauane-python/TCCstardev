@@ -24,7 +24,21 @@
             <input type="email" id="input_email_login" placeholder="Digite um email...">
             <br>
             <label for="senha_login" id="label_senha_login">Senha</label>
-            <input type="password" id="input_senha_login" placeholder="Digite uma senha">
+            <div id="wrapper_senha_login" class="wrapper-senha">
+                <input type="password" id="input_senha_login" placeholder="Digite uma senha">
+                <button type="button" id="btn_toggle_senha_login" class="btn-toggle-senha" aria-label="Mostrar senha" tabindex="-1">
+                    <svg id="icon_olho_aberto_login" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg id="icon_olho_fechado_login" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.9 18.9 0 0 1 5.06-5.94"></path>
+                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                        <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                </button>
+            </div>
             <p>Não tem cadastro ainda? <a href="/front/cadastro.html" target="_self" class="hrefs">Clique aqui</a></p>
             <p>Esqueci minha senha <a href="/front/esqueci.html" target="_self" class="hrefs">Clique aqui</a></p>
             <br><br>
@@ -32,6 +46,20 @@
         </section>
     </main>
     <script>
+        // --- Mostrar/ocultar senha ---
+        const inputSenhaLogin = document.getElementById("input_senha_login");
+        const btnToggleSenhaLogin = document.getElementById("btn_toggle_senha_login");
+        const iconOlhoAbertoLogin = document.getElementById("icon_olho_aberto_login");
+        const iconOlhoFechadoLogin = document.getElementById("icon_olho_fechado_login");
+
+        btnToggleSenhaLogin.addEventListener("click", () => {
+            const mostrando = inputSenhaLogin.type === "text";
+            inputSenhaLogin.type = mostrando ? "password" : "text";
+            iconOlhoAbertoLogin.style.display = mostrando ? "block" : "none";
+            iconOlhoFechadoLogin.style.display = mostrando ? "none" : "block";
+            btnToggleSenhaLogin.setAttribute("aria-label", mostrando ? "Mostrar senha" : "Ocultar senha");
+        });
+
         document.getElementById("btn_login").addEventListener("click", async (e) => {
             e.preventDefault();
             const email = document.getElementById("input_email_login").value;
