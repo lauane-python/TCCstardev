@@ -76,7 +76,7 @@
 
         const token = localStorage.getItem("token");
 
-        const API_URL = "http://10.111.9.22:3000"
+        const API_URL = "http://10.111.9.9:3000"
 
         function mostrarStatus(mensagem) {
             status.textContent = mensagem;
@@ -87,7 +87,7 @@
         // Carrega os dados do usuário ao abrir a página
         window.addEventListener("DOMContentLoaded", async () => {
             try {
-                const res = await fetch("http://10.111.9.22:3000/usuario", {
+                const res = await fetch("http://10.111.9.9:3000/usuario", {
                     method: "GET",
                     headers: { "Authorization": "Bearer " + token }
                 });

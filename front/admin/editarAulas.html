@@ -500,7 +500,7 @@
     }
     let videoaulas = [];
     let aulas = [];
-    const API = "http://10.111.9.22:3000";
+    const API = "http://10.111.9.9:3000";
         /* =================================================
            CARREGAR VIDEOAULAS
         ================================================= */
@@ -538,7 +538,7 @@
     async function carregarMaterias() {
         try {
 
-            const resposta = await fetch("http://10.111.9.22:3000/aulas");
+            const resposta = await fetch("http://10.111.9.9:3000/aulas");
 
             if (!resposta.ok) {
                 throw new Error("Erro ao buscar matérias");

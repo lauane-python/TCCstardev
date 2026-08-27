@@ -618,5 +618,5 @@ app.use(
     chatbotRoutes
 );
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://10.111.9.22:${PORT}`);
+    console.log(`Servidor rodando em http://10.111.9.9:${PORT}`);
 });
