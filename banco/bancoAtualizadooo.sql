@@ -55,21 +55,24 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
   `senha` text NOT NULL,
   `telefone` varchar(15) NOT NULL DEFAULT '',
   `nivel` varchar(50) DEFAULT 'U',
+  `bio` varchar(255) DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_cadastro`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- Copiando dados para a tabela stardev.cadastro: ~9 rows (aproximadamente)
 DELETE FROM `cadastro`;
-INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `nivel`) VALUES
-	(15, 'Lauane Gazola', 'lauanegazola@gmail.com', '$2b$10$N7C1CdfbwVM1ve9V7zO7ke7.UPLHOAlOlUxrgm5icwSCRNRNi4W.G', '(18) 99653-4326', 'U'),
-	(16, 'STARDEV', 'stardevaulas@gmail.com', '$2b$10$9nhJ99/wWi4EJIh4uXINie54Fhomuu2twV1zm9Jre.MQOV6tr0D.e', 'stardevaulas@gm', 'A'),
-	(17, 'Melissa Teste', 'marrofon@gmail.com', '$2b$10$.Ab/j2eVDiWAyc8oImBqzOk4ytz3wCz8QBACXLhJWITej6x.ZHDIC', '18991635678', 'U'),
-	(18, 'Melissa vieira dos @santos', 'lauaneribeiro@gmail.com', '$2b$10$VBxn3i5ajjskw3Th1xii3ebSfuyRrwB73IC4X3jfsrwudpfQlxtOy', '18988232550', 'U'),
-	(19, 'Melissa Vieira', 'stardev@gmail.com', '$2b$10$zu2ObJzS4JP.zUgYmjFZZeOAtQUqKJUOlVWhRXV074OPGQR03OrT2', '18988232550', 'U'),
-	(20, 'Testando Duplas', 'testeduplas@gmail.com', '$2b$10$cwOWk/33xywFgf14RJQKJ.zVkR6qIFIY9U3/Zhwprpiw8zSe3GbZq', '18988232550', 'U'),
-	(21, 'Teste gomes', 'teste@email.com', '$2b$10$VuKuL8.xCAThQbJN.gyQhOF8oCwbW5T22B.ByMLnZYiVo4N3Y2rZm', '1890028922', 'U'),
-	(22, 'Oi dos Santos', 'oi@gmail.com', '$2b$10$kqw3WHLVXzUPwanZkaY0Qu0I38zIGIl64Wrhj0S1UQZzDHtzMF9ku', '1867674267', 'U'),
-	(23, 'Antonio', 'antonio@gmail.com', '$2b$10$LkZwUN62ooGUQMNL1vxSTu6vw0CGSHdIPXqpbg.inZsYPgiDefo9.', '18987656678', 'U');
+INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `nivel`, `bio`, `foto`) VALUES
+	(15, 'Lauane Gazola', 'lauanegazola@gmail.com', '$2b$10$N7C1CdfbwVM1ve9V7zO7ke7.UPLHOAlOlUxrgm5icwSCRNRNi4W.G', '(18) 99653-4326', 'U', NULL, NULL),
+	(16, 'STARDEV', 'stardevaulas@gmail.com', '$2b$10$9nhJ99/wWi4EJIh4uXINie54Fhomuu2twV1zm9Jre.MQOV6tr0D.e', 'stardevaulas@gm', 'A', NULL, NULL),
+	(17, 'Melissa Teste', 'marrofon@gmail.com', '$2b$10$.Ab/j2eVDiWAyc8oImBqzOk4ytz3wCz8QBACXLhJWITej6x.ZHDIC', '18991635678', 'U', NULL, NULL),
+	(18, 'Melissa vieira dos @santos', 'lauaneribeiro@gmail.com', '$2b$10$VBxn3i5ajjskw3Th1xii3ebSfuyRrwB73IC4X3jfsrwudpfQlxtOy', '18988232550', 'U', NULL, NULL),
+	(19, 'Melissa Vieira', 'stardev@gmail.com', '$2b$10$zu2ObJzS4JP.zUgYmjFZZeOAtQUqKJUOlVWhRXV074OPGQR03OrT2', '18988232550', 'U', NULL, NULL),
+	(20, 'Testando Duplas', 'testeduplas@gmail.com', '$2b$10$cwOWk/33xywFgf14RJQKJ.zVkR6qIFIY9U3/Zhwprpiw8zSe3GbZq', '18988232550', 'U', NULL, NULL),
+	(21, 'Teste gomes', 'teste@email.com', '$2b$10$VuKuL8.xCAThQbJN.gyQhOF8oCwbW5T22B.ByMLnZYiVo4N3Y2rZm', '1890028922', 'U', NULL, NULL),
+	(22, 'Oi dos Santos', 'oi@gmail.com', '$2b$10$kqw3WHLVXzUPwanZkaY0Qu0I38zIGIl64Wrhj0S1UQZzDHtzMF9ku', '1867674267', 'U', NULL, NULL),
+	(23, 'Antonio', 'antonio@gmail.com', '$2b$10$LkZwUN62ooGUQMNL1vxSTu6vw0CGSHdIPXqpbg.inZsYPgiDefo9.', '18987656678', 'U', NULL, NULL),
+	(24, 'Bruna Markezini', 'bru@gmail.com', '$2b$10$kBobJ/i/fRBJTXJ7kv3/NOkj2fH/WP4RGJwU7jd6w7WC4WWkvynB2', '18996534326', 'U', NULL, NULL);
 
 -- Copiando estrutura para tabela stardev.contato
 DROP TABLE IF EXISTS `contato`;
@@ -81,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `contato` (
   `data_envio` timestamp NOT NULL DEFAULT current_timestamp(),
   `status_feedback` varchar(20) DEFAULT 'Pendente',
   PRIMARY KEY (`id_contato`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- Copiando dados para a tabela stardev.contato: ~19 rows (aproximadamente)
 DELETE FROM `contato`;
@@ -104,7 +107,8 @@ INSERT INTO `contato` (`id_contato`, `nome`, `email`, `comentario`, `data_envio`
 	(17, 'Filipe Deshasp', 'feliperer@email.com', 'ajfhasjkdfhajksdfhkjsdf', '2026-05-05 13:24:30', 'Pendente'),
 	(18, 'Érick Jacquin', 'jacquin@email.com', 'trouxe bolinho de chocolate para o Brasil!', '2026-05-19 19:35:13', 'Pendente'),
 	(19, 'Meliisa Testando', 'melissaviera@gmail.com', 'ometando teste', '2026-08-06 18:39:19', 'Pendente'),
-	(20, 'Lauane Pasquini Ribeiro', 'lauane.ribeiro@aluno.senai.br', 'fudghsdfhgkjhfdkghsfd', '2026-08-06 18:39:58', 'Pendente');
+	(20, 'Lauane Pasquini Ribeiro', 'lauane.ribeiro@aluno.senai.br', 'fudghsdfhgkjhfdkghsfd', '2026-08-06 18:39:58', 'Pendente'),
+	(21, 'bndghjfghmf', 'fgdhghjfghjh', 'kfhjkhjgkhjk', '2026-08-27 16:30:36', 'Pendente');
 
 -- Copiando estrutura para tabela stardev.materias
 DROP TABLE IF EXISTS `materias`;
