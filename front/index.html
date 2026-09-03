@@ -1,178 +1,253 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarDev</title>
-    <link rel="stylesheet" href="/front/style.css">
-    <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
-    <!-- <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"> -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StarDev — Aprenda TI do jeito certo</title>
+<meta name="description" content="StarDev: cursos de tecnologia gratuitos, do iniciante ao avançado, com aulas em vídeo e um mentor de IA para tirar suas dúvidas." />
+<link rel="icon" href="assets/icons/icon-192.png" />
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/chatbot.css" />
 </head>
+<body class="bg-grid">
 
-<body class="body_index_cadastro">
-    <header class="header_index_cadastro">
-        <figure class="logo">
-            <a href="/front/index.html" class="hrefs">
-                <img src="/front/img/logo.svg" alt="LOGOTIPO StarDev">
-            </a>
-        </figure>
-        <nav>
-            <a href="#home">HOME</a>
-            <a href="#feedback">FEEDBACK</a>
-            <a href="/front/cadastro.html">CADASTRE-SE</a>
-            <a href="/front/login.html">LOGIN</a>
-        </nav>
-    </header>
-    <main>
-        <section id="ftbanner">
-            <img src="/front/img/banner.svg" alt="Banner StarDev" class="banner-bg">
-        </section>
-        <!-- <section class="video-hero">
-            <div class="video-hero__media">
-                <iframe
-                    src="https://www.youtube.com/embed/PPNo11EimaI?autoplay=1&&loop=1&playlist=PPNo11EimaI&controls=0&rel=0&modestbranding=1"
-                    title="Vídeo StarDev"
-                    frameborder="100"
-                    allow="autoplay; encrypted-media"
-                    allowfullscreen>
-                </iframe>
-            </div>
-            <div class="video-hero__overlay">
-                <h1>Aprenda. Desenvolva. Evolua.</h1>
-                <p>Sua jornada para se tornar um desenvolvedor começa aqui.</p>
-            </div>
-        </section> -->
-        <section id="home" data-aos="fade-up">
-            <h2>HOME</h2>
-            <p>
-                A StarDev surgiu da identificação de uma lacuna no ensino de tecnologia: a falta de um curso online que
-                reunisse,
-                de forma clara, objetiva e direta, os principais conteúdos de um curso técnico em TI. Inspirada em
-                referências consolidadas do ensino digital,
-                a plataforma integra o melhor desses modelos para oferecer uma experiência completa e acessível.
-                Com conteúdos próprios desenvolvidos em formato de vídeo e disponibilizados via YouTube,
-                a StarDev direciona seus usuários para um ambiente organizado e intuitivo, onde, já na tela inicial,
-                é possível acessar diversas disciplinas e escolher aquela de maior interesse. Ao selecionar uma área,
-                o estudante é conduzido a uma página estruturada com aulas divididas por tópicos específicos,
-                além de classificadas por níveis — iniciante, intermediário e avançado —
-                permitindo uma jornada de aprendizado progressiva, personalizada e alinhada ao ritmo de cada usuário.
-            </p>
-        </section>
-        <section id="ftcriadoras">
-            <!--eu-->
-            <div class="card-3d" data-aos="fade-up">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="/front/img/ftlau.svg" alt="Lauane Pasquini">
-                    </div>
-                    <div class="card-back">
-                        <h3>Lauane Pasquini</h3>
-                        <p>Coautora da StarDev</p>
-                        <p>Desenvolvedora Front-end</p>
-                        <p>Videomaker</p>
-                    </div>
-                </div>
-            </div>
-            <!--melissa-->
-            <div class="card-3d" data-aos="fade-up" data-aos-delay="200">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="/front/img/ftmel.svg" alt="Melissa Cristina">
-                    </div>
-                    <div class="card-back">
-                        <h3>Melissa Cristina</h3>
-                        <p>Coautora da StarDev</p>
-                        <p>Desenvolvedora Back-end</p>
-                        <p>Database Developer</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section id="feedback">
-            <h2>Nos dê seu feedback</h2>
-            <fieldset>
-                <legend><b>Informações de contato</b></legend>
-                <label for="name">Nome:</label>
-                <input type="text" id="name" placeholder="Digite seu nome completo">
-                <label for="email">Email:</label>
-                <input type="email" id="email" placeholder="Digite seu melhor email">
-                <label for="comentarios">Comentários:</label>
-                <textarea id="comentarios" placeholder="Digite seus comentários aqui"></textarea>
-                <button id="btn_enviar"><strong>Enviar feedback</strong></button>
-                <p id="resultadoFale"></p>
-            </fieldset>
-        </section>
-    </main>
-    <footer id="footer_index_cadastro">
-        <p><a href="/front/cadastro.html" class="hrefs">Cadastre-se</a></p>
-        <p class="paragrafo-footer">&copy; 2026 StarDev</p>
-    </footer>
-    <script>
-        // CONTATO
-        document.getElementById("btn_enviar").addEventListener("click", async () => {
-            const nome = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const comentario = document.getElementById("comentarios").value;
-            try {
-                const resposta = await fetch("http://10.111.9.9:3000/contato", {
-                    method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        nome: nome,
-                        email: email,
-                        comentario: comentario
-                    })
-                });
-                const dados = await resposta.json();
-                if (resposta.ok) {
-                    mostrarAlerta("Feedback enviado com sucesso!");
-                    document.getElementById("name").value = "";
-                    document.getElementById("email").value = "";
-                    document.getElementById("comentarios").value = "";
-                } else {
-                    mostrarAlerta("Erro ao enviar feedback.");
-                }
-            } catch (erro) {
-                console.log(erro);
-                mostrarAlerta("Erro ao conectar com o servidor.");
-            }
-        });
-        // CARDS
-        const cards = document.querySelectorAll('.card-3d');
-        function ativarFlip() {
-            const windowHeight = window.innerHeight;
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const inner = card.querySelector('.card-inner');
-                if (rect.top < windowHeight - 150) {
-                    inner.classList.add('virado');
-                }
-            });
-        }
-        window.addEventListener('scroll', ativarFlip);
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                const inner = card.querySelector('.card-inner');
-                inner.classList.toggle('virado');
-            });
-        });
-        // ALERTA
-        function mostrarAlerta(mensagem) {
-            const alerta = document.getElementById("alerta");
-            const texto = document.getElementById("alerta-texto");
-            texto.innerText = mensagem;
-            alerta.classList.add("mostrar");
-            setTimeout(() => {
-                alerta.classList.remove("mostrar");
-            }, 3000);
-        }
-    </script>
-</body>
-<div id="alerta" class="alerta">
-    <p id="alerta-texto">LAUANE</p>
-</div>
+<div class="loader-pagina"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
+
+<!-- ====================== HEADER ====================== -->
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="logo-texto">Star Dev</span>
+    </a>
+
+    <nav class="nav-desktop">
+      <a href="index.html" class="nav-link ativo">Início</a>
+      <a href="index.html#trilhas" class="nav-link">Trilhas</a>
+      <a href="index.html#como-funciona" class="nav-link">Como funciona</a>
+      <a href="index.html#equipe" class="nav-link">Equipe</a>
+      <a href="index.html#contato" class="nav-link">Contato</a>
+    </nav>
+
+    <div class="nav-acoes">
+      <a href="login.html" class="btn btn-ghost btn-sm">Entrar</a>
+      <a href="cadastro.html" class="btn btn-primario btn-sm">Criar conta grátis</a>
+      <button class="nav-toggle" aria-label="Abrir menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== HERO ====================== -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">plataforma 100% gratuita</span>
+      <h1 style="margin-top:16px">Aprenda TI <span class="gradient-text">do jeito que faz sentido</span> pra você.</h1>
+      <p class="lead">A StarDev reúne, num só lugar, tudo que o mercado técnico cobra: Front-end, Back-end, Banco de Dados, Lógica, UX/UI e IA — em videoaulas diretas ao ponto, com trilha Iniciante → Intermediário → Avançado.</p>
+      <div class="hero-acoes">
+        <a href="cadastro.html" class="btn btn-primario">Começar agora</a>
+        <a href="#trilhas" class="btn btn-secundario">Ver as trilhas</a>
+      </div>
+      <div class="hero-tags">
+        <span class="tag-mono">12 conteúdos</span>
+        <span class="tag-mono">Iniciante → Avançado</span>
+        <span class="tag-mono">Aulas no YouTube</span>
+        <span class="tag-mono">Mentor de IA incluído</span>
+      </div>
+    </div>
+
+    <div class="terminal-window reveal">
+      <div class="terminal-topbar">
+        <span class="terminal-dot vermelho"></span>
+        <span class="terminal-dot amarelo"></span>
+        <span class="terminal-dot verde"></span>
+        <span class="terminal-titulo">bash — stardev</span>
+      </div>
+      <div class="terminal-body" id="terminalHero"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== TRILHAS ====================== -->
+<section id="trilhas" class="section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">o que você estuda aqui</span>
+      <h2>Uma trilha para cada parte do curso técnico</h2>
+      <p>Cada disciplina é dividida em partes independentes, sempre sinalizando o nível: Iniciante, Intermediário ou Avançado — você escolhe por onde entrar.</p>
+    </div>
+
+    <div class="grid-trilhas">
+      <div class="card-trilha reveal">
+        <div class="icone-trilha">&lt;/&gt;</div>
+        <h3>Front-end</h3>
+        <p>HTML, CSS, JavaScript e as boas práticas de interface que todo projeto usa.</p>
+        <div class="niveis-mini"><span class="badge-nivel iniciante">iniciante</span><span class="badge-nivel intermediario">intermediário</span><span class="badge-nivel avancado">avançado</span></div>
+      </div>
+      <div class="card-trilha reveal">
+        <div class="icone-trilha">{ }</div>
+        <h3>Back-end</h3>
+        <p>APIs, autenticação, regras de negócio e a lógica por trás dos sistemas.</p>
+        <div class="niveis-mini"><span class="badge-nivel iniciante">iniciante</span><span class="badge-nivel intermediario">intermediário</span><span class="badge-nivel avancado">avançado</span></div>
+      </div>
+      <div class="card-trilha reveal">
+        <div class="icone-trilha">DB</div>
+        <h3>Banco de Dados</h3>
+        <p>Modelagem, SQL na prática e como guardar dados de forma segura.</p>
+        <div class="niveis-mini"><span class="badge-nivel iniciante">iniciante</span><span class="badge-nivel intermediario">intermediário</span><span class="badge-nivel avancado">avançado</span></div>
+      </div>
+      <div class="card-trilha reveal">
+        <div class="icone-trilha">λ</div>
+        <h3>Lógica de Programação</h3>
+        <p>A base que sustenta qualquer linguagem — pra quem tá começando do zero.</p>
+        <div class="niveis-mini"><span class="badge-nivel iniciante">iniciante</span><span class="badge-nivel intermediario">intermediário</span></div>
+      </div>
+      <div class="card-trilha reveal">
+        <div class="icone-trilha">UX</div>
+        <h3>UX/UI</h3>
+        <p>Como pensar em experiência e interface antes de sair codando.</p>
+        <div class="niveis-mini"><span class="badge-nivel iniciante">iniciante</span><span class="badge-nivel intermediario">intermediário</span></div>
+      </div>
+      <div class="card-trilha reveal">
+        <div class="icone-trilha">AI</div>
+        <h3>Inteligência Artificial</h3>
+        <p>Conceitos de IA aplicados na prática, sem enrolação.</p>
+        <div class="niveis-mini"><span class="badge-nivel iniciante">iniciante</span><span class="badge-nivel intermediario">intermediário</span><span class="badge-nivel avancado">avançado</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== COMO FUNCIONA ====================== -->
+<section id="como-funciona">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">passo a passo</span>
+      <h2>Como funciona a StarDev</h2>
+    </div>
+    <div class="grid-passos">
+      <div class="passo reveal"><span class="passo-num">01</span><h3>Crie sua conta</h3><p>Cadastro rápido com nome, e-mail, telefone e senha — tudo já protegido com criptografia.</p></div>
+      <div class="passo reveal"><span class="passo-num">02</span><h3>Escolha sua trilha</h3><p>Selecione a disciplina do seu interesse na sua área do aluno.</p></div>
+      <div class="passo reveal"><span class="passo-num">03</span><h3>Assista as aulas</h3><p>Vídeos organizados em partes, na ordem certa de aprendizado, direto do YouTube.</p></div>
+      <div class="passo reveal"><span class="passo-num">04</span><h3>Tire dúvidas com a IA</h3><p>A Dev Mentor está sempre no cantinho da tela pra te ajudar no que precisar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== EQUIPE ====================== -->
+<section id="equipe" class="section-escura">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">quem construiu</span>
+      <h2>A equipe por trás da StarDev</h2>
+      <p>Um projeto técnico pensado por estudantes, para estudantes.</p>
+    </div>
+    <div class="grid-equipe">
+      <div class="card-membro reveal">
+        <div class="avatar-fallback">LP</div>
+        <h3>Lauane Pasquini</h3>
+        <span>Idealizadora & Desenvolvimento</span>
+      </div>
+      <div class="card-membro reveal">
+        <div class="avatar-fallback">MV</div>
+        <h3>Melissa Vieira</h3>
+        <span>Idealizadora & Desenvolvimento</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== CONTATO ====================== -->
+<section id="contato" class="section-alt">
+  <div class="container grid-contato">
+    <div class="reveal">
+      <span class="eyebrow">fale com a gente</span>
+      <h2 style="margin-top:14px; font-size:32px;">Alguma dúvida, sugestão ou parceria?</h2>
+      <p style="margin-top:14px; color:#4a373c;">Preenche o formulário ao lado que a gente te responde por e-mail. Toda mensagem cai direto no painel administrativo da equipe StarDev.</p>
+      <div class="info-contato" style="margin-top:28px;">
+        <div class="info-item">
+          <span class="info-icone"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#814456" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></span>
+          <div><h4>E-mail</h4><p>contato@stardev.com.br</p></div>
+        </div>
+        <div class="info-item">
+          <span class="info-icone"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#814456" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></span>
+          <div><h4>WhatsApp</h4><p>+55 (18) 99689-0559</p></div>
+        </div>
+        <div class="info-item">
+          <span class="info-icone"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#814456" stroke-width="1.8"><path d="M23 7 16 12l7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+          <div><h4>YouTube</h4><p>Canal StarDev (aulas gravadas)</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card reveal">
+      <div class="form-aviso" id="contatoAviso"></div>
+      <form id="formContato" novalidate>
+        <div class="campo">
+          <label for="contatoNome">Nome completo</label>
+          <input type="text" id="contatoNome" name="nome" required minlength="6" placeholder="Como podemos te chamar" />
+          <div class="msg-campo" data-erro-de="contatoNome"></div>
+        </div>
+        <div class="campo">
+          <label for="contatoEmail">E-mail</label>
+          <input type="email" id="contatoEmail" name="email" required placeholder="voce@email.com" />
+          <div class="msg-campo" data-erro-de="contatoEmail"></div>
+        </div>
+        <div class="campo">
+          <label for="contatoComentario">Sua mensagem</label>
+          <textarea id="contatoComentario" name="comentario" required minlength="10" placeholder="Conta pra gente o que você precisa..."></textarea>
+          <div class="msg-campo" data-erro-de="contatoComentario"></div>
+        </div>
+        <button type="submit" class="btn btn-primario btn-block" id="btnEnviarContato">Enviar mensagem</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <span class="logo-texto">Star Dev</span>
+        <p class="slogan">Cursos de tecnologia gratuitos, direto ao ponto, para quem quer entrar em TI de verdade.</p>
+      </div>
+      <div>
+        <h5>Plataforma</h5>
+        <ul>
+          <li><a href="index.html#trilhas">Trilhas</a></li>
+          <li><a href="login.html">Entrar</a></li>
+          <li><a href="cadastro.html">Criar conta</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contato</h5>
+        <ul>
+          <li><a href="index.html#contato">Fale conosco</a></li>
+          <li><a href="mailto:contato@stardev.com.br">contato@stardev.com.br</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-baixo">
+      <span>© 2026 StarDev — projeto técnico de Lauane Pasquini &amp; Melissa Vieira.</span>
+      <span>feito com &gt;_ e café</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/mask.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/chatbot.js"></script>
 </body>
 </html>

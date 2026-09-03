@@ -1,211 +1,114 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro-StarDev</title>
-  <link rel="stylesheet" href="/front/style.css">
-  <link rel="icon" type="image/x-icon" href="/front/img/favicon.ico">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Criar conta — StarDev</title>
+<link rel="icon" href="assets/icons/icon-192.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/chatbot.css" />
 </head>
-<body class="body_index_cadastro">
-    <header class="header_index_cadastro">
-        <figure class="logo">
-            <a href="/front/index.html" target="_self" class="hrefs"><img src="/front/img/logo.svg" alt="LOGOTIPO StarDev" href="/front/index.html"></a>
-        </figure>
-        <nav>
-            <a href="/front/cadastro.html">CADASTRA-SE</a>
-            <a href="/front/login.html">LOGIN</a>
-        </nav>
-    </header>
-    <main>
-        <section id="section_total_cadastro">
-            <section id="img_logoflu_cadastro">
-                <figure>
-                    <img src="/front/img/logoflu.svg" alt="LOGOTIPO STARDEV" class="logoflu">
-                </figure>
-            </section>
-            <section>
-                <h1 id="h1_cadastro">Cadastra-se</h1>
-                <br>
-                <section id="section_cadastro">
-                    <label for="nome" id="label_nome">Nome</label>
-                    <br>
-                    <input type="text" id="input_nome" name="nome" autocomplete="name"
-                        placeholder="Digite seu nome completo">
-                    <br>
-                    <label for="email" id="label_email">E-mail</label>
-                    <br>
-                    <input type="email" id="input_email" name="email" autocomplete="email"
-                        placeholder="Digite seu e-mail favorito">
-                    <br>
-                    <label for="telefone" type="tel" id="label_telefone">Telefone</label>
-                    <br>
-                    <input type="tel" id="input_telefone" name="telefone" placeholder="+55 (00) 00000-0000" maxlength="19" inputmode="numeric">
-                    <br>
-                    <label for="senha" id="label_senha">Senha</label>
-                    <br>
-                    <div id="wrapper_senha" class="wrapper-senha">
-                        <input type="password" id="input_senha" name="senha" autocomplete="new-password"
-                            placeholder="Digite sua senha">
-                        <button type="button" id="btn_toggle_senha" class="btn-toggle-senha" aria-label="Mostrar senha" tabindex="-1">
-                            <svg id="icon_olho_aberto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="icon_olho_fechado" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.9 18.9 0 0 1 5.06-5.94"></path>
-                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
-                                <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
-                                <line x1="1" y1="1" x2="23" y2="23"></line>
-                            </svg>
-                        </button>
-                    </div>
-                    <br>
-                    <button type="submit" class="button" id="btn_salvar_cadastro">Cadastrar</button>
-                    <br>
-                    <p>Já tem uma conta? <a href="/front/login.html" target="_self" class="hrefs">Clique aqui</a></p>
-                </section>
-            </section>
-        </section>
-    </main>
-    <footer id="footer_index_cadastro">
-        <p><a href="/front/index.html" target="_self" class="hrefs"><strong>StarDev</strong></a></p>
-        <p class="paragrafo-footer">&copy 2026 StarDev. Todos os direitos reservados.</p>
-    </footer>
-    <script>
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+<body class="bg-grid">
 
-        const senhaRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/;
-        const nomeRegex = /^[A-Za-zÀ-ÿ\s]+$/;
-        const telefoneRegex = /^\d{10,11}$/;
+<div class="loader-pagina"><div class="loader-terminal">stardev --iniciando<span class="cursor-piscante"></span></div></div>
 
-        // --- Máscara automática do telefone: +55 (DD) DDDDD-DDDD ---
-        const inputTelefone = document.getElementById("input_telefone");
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg>
+      </span>
+      <span class="logo-texto">Star Dev</span>
+    </a>
+    <nav class="nav-desktop">
+      <a href="index.html" class="nav-link">Início</a>
+      <a href="index.html#trilhas" class="nav-link">Trilhas</a>
+      <a href="index.html#contato" class="nav-link">Contato</a>
+    </nav>
+    <div class="nav-acoes">
+      <a href="login.html" class="btn btn-ghost btn-sm">Entrar</a>
+      <button class="nav-toggle" aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </div>
+</header>
 
-        function mascaraTelefone(digitos) {
-            digitos = digitos.slice(0, 11); // DDD + até 9 dígitos
-            const ddd = digitos.slice(0, 2);
-            const resto = digitos.slice(2);
+<main class="pagina-auth">
+  <div class="container">
+    <div class="auth-grid">
+      <div class="auth-lado">
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 20" fill="none"><path d="M2 3L10 10L2 17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="20" y2="17" stroke="#F2E8E0" stroke-width="2.6" stroke-linecap="round"/></svg>
+        </span>
+        <h2>Bem-vindo(a) à StarDev</h2>
+        <p>Cadastro rápido, sem custo. Depois de criar sua conta, você já cai direto na sua área do aluno com acesso a todas as trilhas.</p>
+        <p style="margin-top:22px;">Já tem conta? <a href="login.html" style="color:var(--cor-destaque); text-decoration:underline;">Entrar</a></p>
+      </div>
 
-            let parte1 = resto;
-            let parte2 = "";
-            if (resto.length > 4) {
-                parte1 = resto.slice(0, resto.length - 4);
-                parte2 = resto.slice(resto.length - 4);
-            }
+      <div class="auth-form-side">
+        <span class="eyebrow">novo por aqui?</span>
+        <h1 style="font-size:26px; margin-top:12px;">Criar conta</h1>
 
-            let resultado = "+55";
-            if (ddd.length > 0) {
-                resultado += " (" + ddd + (ddd.length === 2 ? ")" : "");
-            }
-            if (parte1.length > 0) {
-                resultado += (ddd.length === 2 ? " " : "") + parte1;
-            }
-            if (parte2.length > 0) {
-                resultado += "-" + parte2;
-            }
-            return resultado;
-        }
+        <div class="form-aviso" id="cadastroAviso"></div>
 
-        inputTelefone.addEventListener("input", () => {
-            let digitos = inputTelefone.value.replace(/\D/g, "");
-            // remove o "55" do prefixo fixo que já aparece no campo
-            if (digitos.startsWith("55")) {
-                digitos = digitos.slice(2);
-            }
-            inputTelefone.value = mascaraTelefone(digitos);
-        });
+        <form id="formCadastro" novalidate style="margin-top:22px;">
+          <div class="campo">
+            <label for="cadNome">Nome completo</label>
+            <input type="text" id="cadNome" name="nome" required minlength="6" autocomplete="name" placeholder="Seu nome completo" />
+            <div class="msg-campo" data-erro-de="cadNome"></div>
+          </div>
 
-        inputTelefone.addEventListener("focus", () => {
-            if (inputTelefone.value.trim() === "") {
-                inputTelefone.value = "+55 (";
-            }
-        });
+          <div class="campo">
+            <label for="cadEmail">E-mail</label>
+            <input type="email" id="cadEmail" name="email" required autocomplete="email" placeholder="voce@email.com" />
+            <div class="msg-campo" data-erro-de="cadEmail"></div>
+          </div>
 
-        inputTelefone.addEventListener("blur", () => {
-            const digitos = inputTelefone.value.replace(/\D/g, "").replace(/^55/, "");
-            if (digitos.length === 0) {
-                inputTelefone.value = "";
-            }
-        });
+          <div class="campo">
+            <label for="cadTelefone">Telefone <span class="opcional">(com DDD)</span></label>
+            <input type="tel" id="cadTelefone" name="telefone" required autocomplete="tel" />
+            <div class="msg-campo" data-erro-de="cadTelefone"></div>
+          </div>
 
-        // --- Mostrar/ocultar senha ---
-        const inputSenha = document.getElementById("input_senha");
-        const btnToggleSenha = document.getElementById("btn_toggle_senha");
-        const iconOlhoAberto = document.getElementById("icon_olho_aberto");
-        const iconOlhoFechado = document.getElementById("icon_olho_fechado");
+          <div class="campo">
+            <label for="cadSenha">Senha</label>
+            <div class="input-wrap">
+              <input type="password" id="cadSenha" name="senha" required autocomplete="new-password" placeholder="Crie uma senha forte" />
+              <button type="button" class="btn-olho" data-olho-de="cadSenha" aria-label="Mostrar senha"></button>
+            </div>
+            <div class="forca-senha" id="cadForcaBarra"><span class="forca-barra"></span><span class="forca-barra"></span><span class="forca-barra"></span><span class="forca-barra"></span><span class="forca-barra"></span></div>
+            <ul class="checklist-senha" id="cadChecklist">
+              <li data-regra="tamanho">mínimo 8 caracteres</li>
+              <li data-regra="maiuscula">1 letra maiúscula</li>
+              <li data-regra="minuscula">1 letra minúscula</li>
+              <li data-regra="numero">1 número</li>
+              <li data-regra="especial">1 caractere especial (@$!%*?&.#_-)</li>
+            </ul>
+          </div>
 
-        btnToggleSenha.addEventListener("click", () => {
-            const mostrando = inputSenha.type === "text";
-            inputSenha.type = mostrando ? "password" : "text";
-            iconOlhoAberto.style.display = mostrando ? "block" : "none";
-            iconOlhoFechado.style.display = mostrando ? "none" : "block";
-            btnToggleSenha.setAttribute("aria-label", mostrando ? "Mostrar senha" : "Ocultar senha");
-        });
+          <div class="campo">
+            <label for="cadSenhaConfirma">Confirmar senha</label>
+            <div class="input-wrap">
+              <input type="password" id="cadSenhaConfirma" name="senhaConfirma" required autocomplete="new-password" placeholder="Repita a senha" />
+              <button type="button" class="btn-olho" data-olho-de="cadSenhaConfirma" aria-label="Mostrar senha"></button>
+            </div>
+            <div class="msg-campo" data-erro-de="cadSenhaConfirma"></div>
+          </div>
 
-        document.getElementById("btn_salvar_cadastro").addEventListener("click", async () => {
+          <button type="submit" class="btn btn-primario btn-block" id="btnCadastrar">Criar minha conta</button>
+        </form>
 
-        const nome = document.getElementById("input_nome").value.trim();
-        const email = document.getElementById("input_email").value.trim();
-        // envia só o número nacional (DDD + número), sem o "55" do prefixo do país
-        const telefone = document.getElementById("input_telefone").value.replace(/\D/g, "").replace(/^55/, "");
-        const senha = document.getElementById("input_senha").value;
+        <p class="form-rodape">Já é aluno(a)? <a href="login.html">Fazer login</a></p>
+      </div>
+    </div>
+  </div>
+</main>
 
-        if (nome === "") {
-            alert("Digite seu nome.");
-            return;
-        }
-        
-        if (!nomeRegex.test(nome)) {
-            alert("Digite um nome coretamente");
-            return;
-        }
-
-        if (!emailRegex.test(email)) {
-            alert("Digite um email válido.");
-            return;
-        }
-
-        if (!telefoneRegex.test(telefone)) {
-            alert("Digite um telefone válido.");
-            return;
-        }
-
-        if (!senhaRegex.test(senha)) {
-            alert("A senha deve conter no mínimo 8 caracteres, letra maiúscula, minúscula, número e caractere especial.");
-            return;
-        }
-       
-
-    
-
-        try {
-
-            const resposta = await fetch("http://10.111.9.9:3000/cadastro", {
-                method: "POST",
-                headers:{
-                    "Accept":"application/json",
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify({
-                    nome,
-                    email,
-                    senha,
-                    telefone
-                })
-            });
-
-            const dados = await resposta.json();
-
-            alert(dados.resposta);
-            
-        } catch (erro) {
-            console.error(erro);
-            alert("Erro ao conectar com o servidor.");
-        }
-
-    });
-    </script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/mask.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/cadastro.js"></script>
+<script src="assets/js/chatbot.js"></script>
 </body>
 </html>
