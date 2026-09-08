@@ -4,12 +4,12 @@
  * ==========================================================================
  * Equivalente mobile de front/assets/js/config.js
  *
- * IMPORTANTE — "localhost" NÃO funciona em dispositivo/emulador mobile:
+ * IMPORTANTE — "10.111.9.9" NÃO funciona em dispositivo/emulador mobile:
  *   • Emulador Android Studio -> use "http://10.0.2.2:3000"
- *     (10.0.2.2 é como o emulador Android enxerga o "localhost" da sua máquina)
+ *     (10.0.2.2 é como o emulador Android enxerga o "10.111.9.9" da sua máquina)
  *   • Celular físico com Expo Go -> use o IP da sua máquina na rede local,
  *     ex: "http://192.168.0.15:3000" (celular e PC precisam estar na mesma Wi-Fi)
- *   • iOS Simulator (Mac) -> "http://localhost:3000" funciona normalmente
+ *   • iOS Simulator (Mac) -> "http://10.111.9.9:3000" funciona normalmente
  *
  * Troque o valor de API_BASE abaixo conforme o ambiente que for testar.
  * O back-end (pasta /back do projeto original) continua igual: ele já

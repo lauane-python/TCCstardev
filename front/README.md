@@ -29,7 +29,7 @@ Confirme o arquivo `.env` (usuário/senha do banco) e rode:
 ```bash
 npm run dev   # ou: node server.js
 ```
-O servidor sobe em `http://localhost:3000` (ou na porta definida em `PORT`).
+O servidor sobe em `http://10.111.9.9:3000` (ou na porta definida em `PORT`).
 
 ### 3) Ollama (chatbot)
 ```bash
@@ -49,9 +49,9 @@ Esta pasta é 100% estática — não precisa de build. Duas formas de abrir:
   python3 -m http.server 5500
   ```
 
-Se o back-end estiver em outro endereço (ex: IP da intranet do laboratório, como `10.111.9.22`), ajuste em `assets/js/config.js`:
+Se o back-end estiver em outro endereço (ex: IP da intranet do laboratório, como `10.111.9.9`), ajuste em `assets/js/config.js`:
 ```js
-API_BASE: "http://10.111.9.22:3000",
+API_BASE: "http://10.111.9.9:3000",
 ```
 
 ## Recursos implementados
