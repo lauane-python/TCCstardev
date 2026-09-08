@@ -76,7 +76,7 @@
 
         const token = localStorage.getItem("token");
 
-        const API_URL = "http://10.111.9.9:3000";
+        const API_URL = "http://10.111.9.22:3000";
 
         // --- Máscara automática do telefone: +55 (DD) DDDDD-DDDD ---
         const inputPerfilTelefone = document.getElementById("input_perfil_telefone");
@@ -136,7 +136,7 @@
         // Carrega os dados do usuário ao abrir a página
         window.addEventListener("DOMContentLoaded", async () => {
             try {
-                const res = await fetch("http://10.111.9.9:3000/usuario", {
+                const res = await fetch(`${API_URL}/usuario`, {
                     method: "GET",
                     headers: { "Authorization": "Bearer " + token }
                 });
@@ -179,7 +179,7 @@
             formData.append("foto", file);
 
             try {
-                const res = await fetch("/usuario/foto", {
+                const res = await fetch(`${API_URL}/usuario/foto`, {
                     method: "POST",
                     headers: { "Authorization": "Bearer " + token },
                     body: formData
@@ -199,24 +199,18 @@
 
         // Remover foto (avisa o servidor também)
         removerFotoBtn.addEventListener("click", async () => {
-            fotoImg.src = "";
-            fotoImg.classList.remove("ativo");
-            fotoLabel.classList.remove("tem-foto");
-            fotoInput.value = "";
-
             try {
-                // CORRIGIR salvar perfil:
-                const res = await fetch(`${API_URL}/usuario`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token
-                    },
-                    body: JSON.stringify(payload)
+                const res = await fetch(`${API_URL}/usuario/foto`, {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token }
                 });
                 const data = await res.json();
 
                 if (res.ok) {
+                    fotoImg.src = "";
+                    fotoImg.classList.remove("ativo");
+                    fotoLabel.classList.remove("tem-foto");
+                    fotoInput.value = "";
                     mostrarStatus("Foto removida com sucesso!");
                 } else {
                     mostrarStatus(data.resposta || "Erro ao remover foto");

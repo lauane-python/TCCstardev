@@ -94,7 +94,7 @@
             }
             try {
                 // Verificar se o email existe
-                const verificar = await fetch("http://10.111.9.9:3000/verificarEmail", {
+                const verificar = await fetch("http://10.111.9.22:3000/verificarEmail", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -107,7 +107,7 @@
                     return;
                 }
                 // Atualizar senha
-                const resposta = await fetch("http://10.111.9.9:3000/trocarSenha", {
+                const resposta = await fetch("http://10.111.9.22:3000/trocarSenha", {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
