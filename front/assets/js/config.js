@@ -6,11 +6,11 @@
  * estiver rodando. Por padrão o server.js sobe em http://localhost:3000
  *
  * Se o time preferir usar a intranet do laboratório (IP fixo, como o
- * 10.111.9.9 citado no server.js), basta trocar o valor abaixo.
+ * 10.111.9.22 citado no server.js), basta trocar o valor abaixo.
  * ==========================================================================
  */
 const STARDEV_CONFIG = {
-  API_BASE: "http://localhost:3000",
+  API_BASE: "http://10.111.9.22:3000",
   CHAVE_TOKEN: "stardev_token",
   CHAVE_USUARIO: "stardev_usuario",
 };

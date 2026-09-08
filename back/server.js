@@ -9,7 +9,13 @@ const jwt = require("jsonwebtoken");
 
 const SECRET = "segredo_super_secreto";
 
+app.use(express.json());
+app.use(cors());
+
+// garante que a pasta de upload existe antes de qualquer coisa usar ela
+const fs = require("fs"); 
 const multer = require("multer");
+fs.mkdirSync(path.join(__dirname, "uploads/fotos"), { recursive: true });
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, "uploads/fotos"),
     filename: (req, file, cb) => {
@@ -17,9 +23,6 @@ const storage = multer.diskStorage({
         cb(null, `user_${req.usuario.id}${ext}`);
     }
 });
-
-app.use(express.json());
-app.use(cors());
 
 // chatbot
 const chatbotRoutes = require(
@@ -205,6 +208,32 @@ app.post("/usuario/foto", verificarToken, upload.single("foto"), async (req, res
     } catch (error) {
         console.log(error);
         res.status(500).json({ erro: "Erro ao salvar foto" });
+    }
+});
+
+/* REMOVER FOTO */
+app.delete("/usuario/foto", verificarToken, async (req, res) => {
+    try {
+        const userId = req.usuario.id;
+
+        const [rows] = await conexao.query(
+            "SELECT foto FROM cadastro WHERE id_cadastro=?",
+            [userId]
+        );
+
+        const fotoAtual = rows[0]?.foto;
+        if (fotoAtual) {
+            const caminhoAbsoluto = path.join(__dirname, fotoAtual);
+            fs.unlink(caminhoAbsoluto, (err) => {
+                if (err) console.log("Não foi possível apagar arquivo antigo:", err.message);
+            });
+        }
+
+        await conexao.query("UPDATE cadastro SET foto=NULL WHERE id_cadastro=?", [userId]);
+        return res.json({ resposta: "Foto removida com sucesso" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ erro: "Erro ao remover foto" });
     }
 });
 /*CADASTRO DE AULAS (PROTEGIDO)*/
@@ -618,5 +647,5 @@ app.use(
     chatbotRoutes
 );
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://10.111.9.9:${PORT}`);
+    console.log(`Servidor rodando em http://10.111.9.22:${PORT}`);
 });
