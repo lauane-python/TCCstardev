@@ -92,7 +92,7 @@ para o servidor, exatamente como o front-end web original fazia.
 
 1. Abra o Android Studio → **Device Manager** → crie/inicie um emulador (AVD).
 2. Em `src/config/api.js`, use o endereço especial do emulador para acessar o
-   `10.111.9.9` da sua máquina:
+   `10.111.9.64` da sua máquina:
    ```js
    API_BASE: "http://10.0.2.2:3000",
    ```
