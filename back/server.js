@@ -7,7 +7,7 @@ const conexao = require("./db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const SECRET = "segredo_super_secreto";
+const SECRET = process.env.JWT_SECRET || "segredo_super_secreto";
 
 app.use(express.json());
 app.use(cors());
@@ -647,5 +647,5 @@ app.use(
     chatbotRoutes
 );
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://10.111.9.15:${PORT}`);
+    console.log(`Servidor rodando na porta ${PORT}`);
 });

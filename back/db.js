@@ -1,18 +1,13 @@
-//Meu arquivo de conexão com o banco de dados
-const mysql = require('mysql2/promise')
-//pool de conexao
-const pool = mysql.createPool({
-    //criar as configurações do Banco De Dados
-    host:"localhost",
-    user:"root",
-    password:"",
-    port:3306,
-    database:"stardev",
-    //não necessaria, mas 10conexões simultaneas
-    waitForConnections:true,
-    // máximo de conexões, quando chegar 11, ele, manda esperar até uma conexões, como a de cima seja liberada
-    connectionLimit:10,
+const mysql = require('mysql2/promise');
 
-})
-//exportando o arquivo db como um módulo
-module.exports =  pool
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  port: process.env.DB_PORT || 3306,
+  database: process.env.DB_NAME || "stardev",
+  waitForConnections: true,
+  connectionLimit: 10,
+  ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : undefined,
+});
+module.exports = pool;
