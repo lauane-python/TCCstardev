@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Servidor:                     127.0.0.1
--- Versão do servidor:           12.3.3-MariaDB - MariaDB Server
+-- Versão do servidor:           10.4.32-MariaDB - mariadb.org binary distribution
 -- OS do Servidor:               Win64
 -- HeidiSQL Versão:              12.20.0.7320
 -- --------------------------------------------------------
@@ -58,10 +58,17 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
   PRIMARY KEY (`id_cadastro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25546 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- Copiando dados para a tabela stardev.cadastro: ~22.421 rows (aproximadamente)
+-- Copiando dados para a tabela stardev.cadastro: ~9 rows (aproximadamente)
 DELETE FROM `cadastro`;
 INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `nivel`) VALUES
+	(15, 'Lauane Gazola', 'lauanegazola@gmail.com', '$2b$10$N7C1CdfbwVM1ve9V7zO7ke7.UPLHOAlOlUxrgm5icwSCRNRNi4W.G', '(18) 99653-4326', 'U'),
 	(16, 'STARDEV', 'stardevaulas@gmail.com', '$2b$10$9nhJ99/wWi4EJIh4uXINie54Fhomuu2twV1zm9Jre.MQOV6tr0D.e', 'stardevaulas@gm', 'A'),
+	(9788, 'João da Silva 8740', 'joao8740@email.com', '$2b$10$65XyoFVYHMLQmzV9H/2.heS4wWuheWHLQYlGMcMX/B6JCt1E0shGm', '18988208740', 'U');
+INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `nivel`) VALUES
+	(16452, 'João da Silva 15422', 'joao15422@email.com', '$2b$10$J8Pf6oXN0QO.hr32QAxuFeF1wjhK7yw.AekwvzOay6EoigTJAJpie', '18988215422', 'U');
+INSERT INTO `cadastro` (`id_cadastro`, `nome`, `email`, `senha`, `telefone`, `nivel`) VALUES
+	(25545, 'João da Silva 24499', 'joao24499@email.com', '$2b$10$KS/vAVeGXmIROSgBbQM2/O/TFGcNG5eOScKA6zKtlZzUGtoaNyjxW', '18988224499', 'U');
+
 -- Copiando estrutura para tabela stardev.contato
 DROP TABLE IF EXISTS `contato`;
 CREATE TABLE IF NOT EXISTS `contato` (
