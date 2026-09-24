@@ -500,7 +500,7 @@
     }
     let videoaulas = [];
     let aulas = [];
-    const API = "http://https://stardev-d20v.onrender.com:3000";
+    const API = "https://stardev-d20v.onrender.com";
         /* =================================================
            CARREGAR VIDEOAULAS
         ================================================= */
@@ -538,7 +538,7 @@
     async function carregarMaterias() {
         try {
 
-            const resposta = await fetch("http://https://stardev-d20v.onrender.com:3000/aulas");
+            const resposta = await fetch("https://stardev-d20v.onrender.com/aulas");
 
             if (!resposta.ok) {
                 throw new Error("Erro ao buscar matérias");

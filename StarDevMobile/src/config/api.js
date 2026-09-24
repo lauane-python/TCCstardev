@@ -9,7 +9,7 @@
  *     (10.0.2.2 é como o emulador Android enxerga o "https://stardev-d20v.onrender.com" da sua máquina)
  *   • Celular físico com Expo Go -> use o IP da sua máquina na rede local,
  *     ex: "http://192.168.0.15:3000" (celular e PC precisam estar na mesma Wi-Fi)
- *   • iOS Simulator (Mac) -> "http://https://stardev-d20v.onrender.com:3000" funciona normalmente
+ *   • iOS Simulator (Mac) -> "https://stardev-d20v.onrender.com" funciona normalmente
  *
  * Troque o valor de API_BASE abaixo conforme o ambiente que for testar.
  * O back-end (pasta /back do projeto original) continua igual: ele já

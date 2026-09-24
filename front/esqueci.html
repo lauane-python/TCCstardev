@@ -94,7 +94,7 @@
             }
             try {
                 // Verificar se o email existe
-                const verificar = await fetch("http://https://stardev-d20v.onrender.com:3000/verificarEmail", {
+                const verificar = await fetch("https://stardev-d20v.onrender.com/verificarEmail", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -107,7 +107,7 @@
                     return;
                 }
                 // Atualizar senha
-                const resposta = await fetch("http://https://stardev-d20v.onrender.com:3000/trocarSenha", {
+                const resposta = await fetch("https://stardev-d20v.onrender.com/trocarSenha", {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",

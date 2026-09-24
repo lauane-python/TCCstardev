@@ -29,7 +29,7 @@ Confirme o arquivo `.env` (usuário/senha do banco) e rode:
 ```bash
 npm run dev   # ou: node server.js
 ```
-O servidor sobe em `http://https://stardev-d20v.onrender.com:3000` (ou na porta definida em `PORT`).
+O servidor sobe em `https://stardev-d20v.onrender.com` (ou na porta definida em `PORT`).
 
 ### 3) Ollama (chatbot)
 ```bash
@@ -51,7 +51,7 @@ Esta pasta é 100% estática — não precisa de build. Duas formas de abrir:
 
 Se o back-end estiver em outro endereço (ex: IP da intranet do laboratório, como `https://stardev-d20v.onrender.com`), ajuste em `assets/js/config.js`:
 ```js
-API_BASE: "http://https://stardev-d20v.onrender.com:3000",
+API_BASE: "https://stardev-d20v.onrender.com",
 ```
 
 ## Recursos implementados
