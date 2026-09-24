@@ -1,1 +1,1 @@
-const API_URL = "http://10.111.9.15:3000";
+const API_URL = "http://https://stardev-d20v.onrender.com:3000";

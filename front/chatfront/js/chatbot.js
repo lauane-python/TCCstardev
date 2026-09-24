@@ -58,7 +58,7 @@ async function enviarMensagem() {
     try {
         const response =
             await fetch(
-                "http://10.111.9.15:3000/chatback/chat",
+                "http://https://stardev-d20v.onrender.com:3000/chatback/chat",
                 {
                     method: "POST",
                     headers: {
